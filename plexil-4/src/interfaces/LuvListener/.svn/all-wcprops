@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4494/branches/plexil-4/src/interfaces/LuvListener
+END
+LuvFormat.cc
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4494/branches/plexil-4/src/interfaces/LuvListener/LuvFormat.cc
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/interfaces/LuvListener/Makefile.am
+END
+LuvListener.hh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/p/plexil/code/!svn/ver/4278/branches/plexil-4/src/interfaces/LuvListener/LuvListener.hh
+END
+LuvFormat.hh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4102/branches/plexil-4/src/interfaces/LuvListener/LuvFormat.hh
+END
+LuvListener.cc
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/p/plexil/code/!svn/ver/4494/branches/plexil-4/src/interfaces/LuvListener/LuvListener.cc
+END

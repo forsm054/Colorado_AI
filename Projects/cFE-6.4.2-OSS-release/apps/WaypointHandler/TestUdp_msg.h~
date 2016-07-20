@@ -1,0 +1,14 @@
+#ifndef _TestUdp_msg_h_
+#define _TestUdp_msg_h_
+
+// Structure for housekeeping data
+typedef struct
+{
+	uint8 TlmHeader[CFE_SB_TLM_HDR_SIZE]; // Standard size of message header
+
+
+} TestUdp_hk_t
+
+
+
+#endif //_TestUdp_msg_h_

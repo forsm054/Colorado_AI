@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/p/plexil/code/!svn/ver/4466/branches/plexil-4/examples/basic
+END
+DriveToTarget.plx
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/DriveToTarget.plx
+END
+ArrayComplex.ple
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/ArrayComplex.ple
+END
+SimpleDrive.plx
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/SimpleDrive.plx
+END
+DriveToSchool.plx
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/DriveToSchool.plx
+END
+SafeDrive.ple
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/SafeDrive.ple
+END
+AddArray.plx
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/AddArray.plx
+END
+Gantt-test.plx
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/Gantt-test.plx
+END
+CruiseControl.plx
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/CruiseControl.plx
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/README
+END
+Gantt1.plx
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/Gantt1.plx
+END
+SimpleAssignment.ple
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/SimpleAssignment.ple
+END
+Gantt2.plx
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/Gantt2.plx
+END
+TestUnknown.plx
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/TestUnknown.plx
+END
+DriveToTarget.ple
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/DriveToTarget.ple
+END
+SimpleDrive.ple
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/SimpleDrive.ple
+END
+DriveToSchool.ple
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/DriveToSchool.ple
+END
+AddArray.ple
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/AddArray.ple
+END
+ArrayComplex.plx
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/ArrayComplex.plx
+END
+Gantt-test.ple
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/Gantt-test.ple
+END
+CruiseControl.ple
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/CruiseControl.ple
+END
+SafeDrive.plx
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/SafeDrive.plx
+END
+Gantt1.ple
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/Gantt1.ple
+END
+Gantt2.ple
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/Gantt2.ple
+END
+TestUnknown.ple
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/p/plexil/code/!svn/ver/4366/branches/plexil-4/examples/basic/TestUnknown.ple
+END
+schemas.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/schemas.xml
+END
+Debug.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/basic/Debug.cfg
+END
+IfThenElseif.ple
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/4466/branches/plexil-4/examples/basic/IfThenElseif.ple
+END
+SimpleAssignment.plx
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/4392/branches/plexil-4/examples/basic/SimpleAssignment.plx
+END

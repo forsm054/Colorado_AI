@@ -1,0 +1,103 @@
+#ifndef _TlmHandler_App_h
+#define _TlmHandler_App_h
+
+#include "network_includes.h" // only need if using sockets
+
+// CoreFlight includes
+#include "cfe_error.h"
+#include "cfe_sb.h"
+#include "cfe_time.h"
+#include "cfe_evs.h"
+#include "cfe_tbl.h"
+#include "cfe_es.h"
+#include "cfe_tbl_filedef.h"
+
+// C includes
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <stdbool.h>
+
+// OSAL includes
+#include "common_types.h"
+#include "osapi.h"
+
+#define SERVER "127.0.0.1"
+#define TLM_PORT 8039
+#define BUFLEN 514
+#define TLMHANDLER_PIPE_DEPTH 20
+#define ARRAY_SIZE 50
+
+
+typedef struct
+{
+	//uint8 Header[CFE_SB_CMD_HDR_SIZE];
+	
+	// Initial Conditions (only used for simulation purposes)
+	float xWaypoint_A;
+	float yWaypoint_A;
+	float zWaypoint_A;
+	float xWaypoint_B;
+	float yWaypoint_B;
+	float zWaypoint_B;
+	
+	// State
+  float   AirSpeed;
+  float		Heading;
+  float		xLoc;
+  float		yLoc;
+  float		zLoc;
+  char		Waypoint;
+	
+} TlmHandler_DataPacket_t;
+
+typedef struct
+{
+	uint8 Header[CFE_SB_CMD_HDR_SIZE];
+	
+	char cmd[ARRAY_SIZE];
+	bool Success;
+	
+} TlmHandler_BusPacket_t;
+
+
+typedef struct
+{
+
+	CFE_SB_MsgPtr_t MsgPtr;
+	
+	// Command interface counters
+	uint8 CmdCounter;
+	uint8 ErrCounter;
+	
+	//FIXME: are all of these needed?
+	TlmHandler_BusPacket_t				Fly2A_Packet;
+	TlmHandler_BusPacket_t				Fly2B_Packet;
+	
+	CFE_SB_PipeId_t TelemetryPipe;
+	
+	// App status
+	uint32 RunStatus;
+	
+	// Pipe Data
+	char PipeName[16];
+	uint16 PipeDepth;
+	
+	CFE_TBL_Handle_t	TblHandle;
+	
+} TlmHandler_AppData_t;
+
+
+// Function Definitions
+void TlmHandler_AppMain(void);
+void TlmHandler_init(void);
+void Create_Tlm_Socket(void);
+int InitTableValidation(void *TblData);
+void Return_Handler(CFE_SB_MsgPtr_t msg);
+int SendReturn2Plexil(TlmHandler_BusPacket_t DataPacket);
+//void LogState(TlmHandler_DataPacket_t);
+
+#endif

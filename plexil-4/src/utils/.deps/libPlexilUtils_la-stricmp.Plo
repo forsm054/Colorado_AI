@@ -1,0 +1,1 @@
+libPlexilUtils_la-stricmp.lo: stricmp.c

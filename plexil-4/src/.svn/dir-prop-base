@@ -1,0 +1,11 @@
+K 10
+svn:ignore
+V 74
+autom4te.cache
+config.log
+config.status
+Makefile
+plexil-config.h
+stamp-h1
+
+END

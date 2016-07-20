@@ -1,0 +1,3 @@
+libPlexilIntfc_la-resource-tags.lo: resource-tags.cc resource-tags.hh
+
+resource-tags.hh:

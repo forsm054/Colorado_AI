@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/p/plexil/code/!svn/ver/4516/branches/plexil-4/src/interfaces/IpcUtils
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/interfaces/IpcUtils/Makefile.am
+END
+IpcFacade.hh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/4402/branches/plexil-4/src/interfaces/IpcUtils/IpcFacade.hh
+END
+ipc-data-formats.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/p/plexil/code/!svn/ver/4516/branches/plexil-4/src/interfaces/IpcUtils/ipc-data-formats.h
+END
+IpcFacade.cc
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/4515/branches/plexil-4/src/interfaces/IpcUtils/IpcFacade.cc
+END

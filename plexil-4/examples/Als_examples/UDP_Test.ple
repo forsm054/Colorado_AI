@@ -1,0 +1,60 @@
+// UDP socket test
+
+Command pprint (...);
+String Command test_udp_msg1 (...);
+String Command test_udp_msg2 (...);
+//Command rec_udp_msg();
+
+UDP_Test:
+{
+	String arg1 = "HELLO WORLD";
+	//String arg5 = "WORLD";
+	//String arg2 = "!!!!!";
+	Integer arg2 = 1;
+	Real arg3 = 2.0;
+	Boolean arg4 = true;
+	Integer arg6 = 5;
+	//Real arg5[5] = #(5 5 5 5 5);
+	
+	test_send:
+	{
+		SendUDP:
+		{
+			String ret1;
+			String ret;
+			//RepeatCondition true;
+			//pprint("test_send: sending arg1 =", arg1, "arg2 =", arg2, "arg3 =", arg3, "arg4 =", arg4, "arg5 =", arg5);
+			 
+			 //test_udp_msg1(arg1, arg5, arg2);
+			 test_udp_msg2(arg1, arg2, arg2, arg6);
+			 
+			 ReceiveCommand:
+			 {
+			 	//String ret1;
+			 	pprint("hello");
+			 	test: OnCommand "rec_udp_msg" (String ret)
+			 	{
+			 		//ExitCondition isKnown(ret1);
+			 		ret1 = ret;
+			 		//ReportCommand:
+			 		//{
+			 		//	StartCondition true;
+			 	 	//	pprint("!!!!!",ret);
+		 	 		//}
+		 	 	}
+	 	 	 }
+	 	 	 pprint(ret);
+	 	 	 RetVal:
+	 	 	 {
+	 	 	 	StartCondition isKnown(ret1);
+	 	 	 	pprint("RET1 IS KNOWN:",ret1);
+ 	 	 	 }
+	 	 	 
+			 //SynchronousCommand ret = rec_udp_msg();
+			 
+			 //test_udp_msg(arg1,arg2,arg3,arg4,arg5);
+		} // End SendUDP
+	
+	} // End test-send
+
+} // End UDP_Test

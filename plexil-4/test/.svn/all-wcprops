@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/p/plexil/code/!svn/ver/4444/branches/plexil-4/test
+END
+plexiltest-regression-test
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/test/plexiltest-regression-test
+END
+plexilexec-regression-test
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/test/plexilexec-regression-test
+END

@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 39
+*.dylib
+*.so
+.deps
+Makedepend
+Makefile
+
+END

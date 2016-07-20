@@ -1,0 +1,25 @@
+Command pprint (...);
+Boolean Command Test(Real x, Real y);
+
+Test:
+{
+	Boolean TestSuccess;
+	Real a;
+	Real b;
+	
+	a = Lookup(c);
+	b = Lookup(d);
+	
+	SynchronousCommand TestSuccess = Test(a,b);
+	
+	if TestSuccess
+	{
+		pprint("Command Worked");
+		pprint(a,b);
+	}
+	else
+	{
+		pprint("Command FAILED");
+	}
+	endif
+}

@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/p/plexil/code/!svn/ver/4444/branches/plexil-4/test/TestExec-regression-test
+END
+run-xml-parser-test
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/p/plexil/code/!svn/ver/4344/branches/plexil-4/test/TestExec-regression-test/run-xml-parser-test
+END
+setup-script.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/test/TestExec-regression-test/setup-script.sh
+END
+run-empty-script-valid-test
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/p/plexil/code/!svn/ver/4444/branches/plexil-4/test/TestExec-regression-test/run-empty-script-valid-test
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/test/TestExec-regression-test/Makefile
+END
+strip-ids
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4344/branches/plexil-4/test/TestExec-regression-test/strip-ids
+END
+test-env.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/p/plexil/code/!svn/ver/4344/branches/plexil-4/test/TestExec-regression-test/test-env.sh
+END
+run-simple-drive-test
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/p/plexil/code/!svn/ver/4444/branches/plexil-4/test/TestExec-regression-test/run-simple-drive-test
+END
+run-empty-script-test
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/p/plexil/code/!svn/ver/4444/branches/plexil-4/test/TestExec-regression-test/run-empty-script-test
+END
+run-same-name-script-valid-test
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/p/plexil/code/!svn/ver/4444/branches/plexil-4/test/TestExec-regression-test/run-same-name-script-valid-test
+END
+run-same-name-script-test
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/p/plexil/code/!svn/ver/4444/branches/plexil-4/test/TestExec-regression-test/run-same-name-script-test
+END
+Debug.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/test/TestExec-regression-test/Debug.cfg
+END
+shutdown-script.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/test/TestExec-regression-test/shutdown-script.sh
+END
+run-scripted-valid-test
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/p/plexil/code/!svn/ver/4444/branches/plexil-4/test/TestExec-regression-test/run-scripted-valid-test
+END
+regression.pl
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/test/TestExec-regression-test/regression.pl
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/test/TestExec-regression-test/README
+END
+strip-valid-files
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/p/plexil/code/!svn/ver/4344/branches/plexil-4/test/TestExec-regression-test/strip-valid-files
+END
+resource.data
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/p/plexil/code/!svn/ver/4443/branches/plexil-4/test/TestExec-regression-test/resource.data
+END
+.TestDebug.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/test/TestExec-regression-test/.TestDebug.cfg
+END
+run-tests
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4344/branches/plexil-4/test/TestExec-regression-test/run-tests
+END
+cleanup-test-files
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/p/plexil/code/!svn/ver/4344/branches/plexil-4/test/TestExec-regression-test/cleanup-test-files
+END
+strip-out-files
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/p/plexil/code/!svn/ver/4344/branches/plexil-4/test/TestExec-regression-test/strip-out-files
+END

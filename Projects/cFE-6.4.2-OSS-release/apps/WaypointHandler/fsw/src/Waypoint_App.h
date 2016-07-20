@@ -1,0 +1,156 @@
+#ifndef _Waypoint_App_h
+#define _Waypoint_App_h
+
+#include "network_includes.h" // only need if using sockets
+
+// CoreFlight includes
+#include "cfe_error.h"
+#include "cfe_sb.h"
+#include "cfe_time.h"
+#include "cfe_evs.h"
+#include "cfe_tbl.h"
+#include "cfe_es.h"
+#include "cfe_tbl_filedef.h"
+
+// C includes
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <stdbool.h>
+
+// OSAL includes
+#include "common_types.h"
+#include "osapi.h"
+
+#define RECV_PORT 8038
+#define SERVER "127.0.0.1"
+#define RETURN_PORT 8039
+#define BUFLEN 514
+#define WAYPOINT_PIPE_DEPTH 20
+#define ARRAY_SIZE 50
+#define WP_NUM_TABLES 1
+
+
+typedef struct
+{
+	uint8 DataHeader[CFE_SB_CMD_HDR_SIZE];
+	
+	char Success[4];
+	float xWaypoint_A;
+	float yWaypoint_A;
+	float zWaypoint_A;
+	float xWaypoint_B;
+	float yWaypoint_B;
+	float zWaypoint_B;
+	float vel;
+	float xLoc;
+	float yLoc;
+	float zLoc;
+	float velTarget;
+	float xTarget;
+	float yTarget;
+	float zTarget;
+	int xFlag;
+	int yFlag;
+	int zFlag;
+	char Waypoint;
+	
+} WP_DataPacket_t;
+
+typedef struct
+{
+	
+	char Success[4];
+	float xWaypoint_A;
+	float yWaypoint_A;
+	float zWaypoint_A;
+	float xWaypoint_B;
+	float yWaypoint_B;
+	float zWaypoint_B;
+	float vel;
+	float xLoc;
+	float yLoc;
+	float zLoc;
+	float velTarget;
+	float xTarget;
+	float yTarget;
+	float zTarget;
+	int xFlag;
+	int yFlag;
+	int zFlag;
+	char Waypoint;
+	
+} WP_RecvPacket_t;
+
+
+typedef struct
+{
+	int xWaypoint_A;
+	int yWaypoint_A;
+	int zWaypoint_A;
+	int xWaypoint_B;
+	int yWaypoint_B;
+	int zWaypoint_B;
+	int vel;
+	int xLoc;
+	int yLoc;
+	int zLoc;
+	int xFlag;
+	int yFlag;
+	int zFlag;
+	
+} WP_InitTable_t;
+
+typedef struct
+{
+
+	CFE_SB_MsgPtr_t MsgPtr;
+	
+	// Command interface counters
+	uint8 CmdCounter;
+	uint8 ErrCounter;
+	
+	WP_DataPacket_t				GetICPacket;
+	WP_DataPacket_t 			GetParamsPacket;
+	WP_DataPacket_t 			ActSciPacket;
+	WP_DataPacket_t 			UpdFlightPacket;
+	WP_DataPacket_t 			TakePicPacket;
+	WP_DataPacket_t 			UpdPlanPacket;
+	WP_DataPacket_t				DataPacket;
+	
+	//CFE_SB_PipeId_t GetParamsPipe;
+	//CFE_SB_PipeId_t ActSciPipe;
+	//CFE_SB_PipeId_t UpdFlightPipe;
+	//CFE_SB_PipeId_t TakePicPipe;
+	CFE_SB_PipeId_t ReturnPipe;
+	
+	
+	// App status
+	uint32 RunStatus;
+	
+	// Pipe Data
+	char PipeName[16];
+	uint16 PipeDepth;
+	
+	CFE_TBL_Handle_t	TblHandles[WP_NUM_TABLES];
+	
+} Waypoint_AppData_t;
+
+
+// Function Definitions
+void Waypoint_AppMain(void);
+void Waypoint_init(void);
+void Create_Recv_Socket(void);
+void ProcessUDP(void);
+void Command_Handler(char *);
+void Get_InitCond(void);
+int InitTableValidation(void *TblData);
+void Return_Handler(CFE_SB_MsgPtr_t msg);
+int SendReturn2Plexil(WP_DataPacket_t DataPacket);
+void Update_DataPackets(CFE_SB_MsgPtr_t msg);
+void LogState(WP_DataPacket_t);
+
+#endif

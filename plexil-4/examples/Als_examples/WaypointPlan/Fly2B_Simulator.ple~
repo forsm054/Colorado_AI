@@ -1,0 +1,238 @@
+/////////////////////////////////////////////////////////////////////////
+//
+//  README
+//
+//  Name: Fly2A_Simulator.ple
+//  By: Alec Forsman - Red Canyon Software
+//  Created: 12/29/15
+//  Updated: 1/9/15
+//
+//  Description:
+//		This is the simulator for the plan 'Fly2B.plx'. It emulates the
+//		commands being sent to and received from CoreFlight.
+//
+//	Updates:
+//		1/9/16
+//			- Created - copied from Fly2A_Simlutator.ple
+//			- Created conf file
+//			- Changed A logic to B
+//
+//	Issues:
+//			- Simulator doesn't shutdown properly
+//
+/////////////////////////////////////////////////////////////////////////
+
+Command pprint (...);
+Command UpdateLookup (...);
+Command SendReturnValue (...);
+
+Fly2A_Simulator: Concurrence
+{
+	Boolean At_A = false;
+	//EndCondition At_A;
+	EndCondition ShutdownSimulator.outcome == SUCCESS || At_A;
+	
+	pprint("##################### Firing up the simulator #############################");
+
+	// Emulates the science that would be exectued when waypoint has been reached
+	ExecuteTakePic: // Extra node needed in case of failure
+	{
+		RepeatCondition !At_A;
+		
+		TakePic: OnCommand "TakePic" // Command 1
+		{	
+			// Acknowledges that command was received
+			pprint(" ");
+			pprint("COMMAND 1: TakePic()");
+			pprint("TakePic command registered");
+		} // end TakePic
+		
+	} // End ExecuteTakePic
+	
+	// Updates parameters similar to what would be received from CoreFlight
+	ExecuteGetParams: // Extra node needed in case of failure
+	{
+		RepeatCondition !At_A;
+		
+		GetParams:  OnCommand "GetParams" (Real velocity, Real xLocation, Real yLocation, Real zLocation)// Command 3
+		{
+			PreCondition isKnown(velocity) && isKnown(xLocation) && isKnown(yLocation) && isKnown(zLocation); // makes sure parameters were received properly
+		
+			// Acknowledges that command was received
+			pprint(" ");
+			pprint("COMMAND 3: GetParams()");
+			pprint("Entering GetParams");
+			
+			// Simulates what CoreFlight would do. Basically just updates parameters in predictible manner
+			UpdateLookup("vel", velocity);
+			UpdateLookup("xLoc", xLocation + velocity);
+			UpdateLookup("yLoc", yLocation);
+			UpdateLookup("zLoc", zLocation);
+			UpdateLookup("xTarget", xLocation + velocity); // should change this later to something more robust
+			
+			pprint("Parameters received");
+			
+		} // End GetParams
+	
+	} // End ExecuteGetParams
+	
+	// Check updated flight parameters to make sure they are what is expected
+	ExecuteUpdateFlight: // Extra node needed in case of failure
+	{
+		RepeatCondition !At_A;
+		
+		UpdateFlight: OnCommand "UpdateFlight" (Integer velFlag, Integer xFlag, Integer yFlag, Integer zFlag) // Command 4
+		{
+			
+			// Acknowledges that command was received
+			pprint(" ");
+			pprint("COMMAND 4: UpdateFlight()");
+			pprint("Entering UpdateFlight");
+			
+			velUpdate: // Check velocity
+			{
+			
+				if velFlag == 1
+				{
+					UpdateLookup("vel", Lookup(vel)+1); // make sure it can lookup in simulator, otherwise pass vel
+					pprint("Increasing velocity");
+				} // end if
+				elseif velFlag == -1
+				{
+					UpdateLookup("vel", Lookup(vel)-1);
+					pprint("Decreasing velocity");
+				} // end elseif
+				else
+				{
+					// Do nothing
+					pprint("Maintaining velocity");
+				} // end else
+				endif
+				
+			} // End velUpdate
+			
+			LocationUpdate: // Check location parameters
+			{
+			
+				xUpdate: // Check x Location
+				{
+				
+					if xFlag == 1
+					{
+						UpdateLookup("xLoc", Lookup(xLoc)+1);
+						pprint("Increasing x coordinate");
+					} // end if
+					elseif xFlag == -1
+					{
+						UpdateLookup("xLoc", Lookup(xLoc)-1);
+						pprint("Decreasing x coordinate");
+					} // end elseif
+					else
+					{
+						//UpdateLookup("xLoc", Lookup(xLoc)+1); // still need to update x because its flying horizontal
+						//UpdateLookup("xTarget", Lookup(xTarget)+1);
+						
+						// Do nothing
+						pprint("Maintaining x coordinate");
+					} // end else
+					endif
+				
+				} // end xUpdate
+			
+				yUpdate: // Check y Location
+				{
+				
+					if yFlag == 1
+					{
+						UpdateLookup("yLoc", Lookup(yLoc)+1);
+						pprint("Increasing y coordinate");
+					} // end if
+					elseif yFlag == -1
+					{
+						UpdateLookup("yLoc", Lookup(yLoc)-1);
+						pprint("Decreasing y coordinate");
+					} // end elseif
+					else
+					{
+						// Do nothing
+						pprint("Maintaining y coordinate");
+					} // end else
+					endif
+				
+				} // end yUpdate
+			
+				zUpdate: // Check z Location
+				{
+				
+					if zFlag == 1
+					{
+						UpdateLookup("zLoc", Lookup(zLoc)+1);
+						pprint("Increasing z coordinate");
+					} // end if
+					elseif zFlag == -1
+					{
+						UpdateLookup("zLoc", Lookup(zLoc)-1);
+						pprint("Decreasing z coordinate");
+					} // end elseif
+					else
+					{
+						// Do nothing
+						pprint("Maintaing z coordinate");
+					} // end else
+					endif
+				
+				} // end zUpdate
+				
+			} // end LocationUpdate
+		
+		} // End UpdateFlight
+	
+	} // End ExecuteUpdateFlight
+	
+	// Simulates the activation of the science equipment needed when close to waypoint location
+	ExecuteActivateScience: // Extra node needed in case of failure
+	{
+		RepeatCondition !At_A;
+		
+		ActivateScience: OnCommand "ActivateScience" // Command 5
+		{
+			
+			// Acknowledges that command has been received
+			pprint(" ");
+			pprint("COMMAND 2: ActivateScience()");
+			pprint("Activating Science");
+			//UpdateLookup("ActivateScienceOutcome", true);
+		
+		} // End ActivateScience
+		
+	} // End ExecuteActivateScience
+	
+	// Simulates the update of the plan when that part of plan has been completed
+	ExecuteUpdatePlan: // Extra node needed in case of failure
+	{
+		RepeatCondition !At_A;
+		
+		UpdatePlan: OnCommand "UpdatePlan" // Command 2	
+		{
+			
+			// Acknowledges that command has been received
+			pprint(" ");
+			pprint("COMMAND 5: UpdatePlan()");
+			pprint("Executing UpdatePlan");
+			//UpdateLookup("UpdateOutcome", true);
+		
+		} // End UpdatePlan
+		
+	} // End ExecuteUpdatePlan
+	
+	// Shutdowns the simulator properly
+	ShutdownSimulator: OnCommand "PlanComplete"
+	{
+		//EndCondition At_A;
+		
+		pprint(" ");
+		pprint("Shutting Down Simulator");
+		At_A = true;
+	} // End ShutdownSimulator
+
+} // End Fly2ASimulator

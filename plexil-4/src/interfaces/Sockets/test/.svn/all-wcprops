@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/4253/branches/plexil-4/src/interfaces/Sockets/test
+END
+simple_server_main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/test/simple_server_main.cpp
+END
+simple_client_main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/test/simple_client_main.cpp
+END

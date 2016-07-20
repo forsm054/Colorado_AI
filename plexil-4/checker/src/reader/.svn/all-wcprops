@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/p/plexil/code/!svn/ver/4303/branches/plexil-4/checker/src/reader
+END
+DeclReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/p/plexil/code/!svn/ver/4303/branches/plexil-4/checker/src/reader/DeclReader.java
+END
+PlanReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/p/plexil/code/!svn/ver/4303/branches/plexil-4/checker/src/reader/PlanReader.java
+END
+ExprReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/p/plexil/code/!svn/ver/4297/branches/plexil-4/checker/src/reader/ExprReader.java
+END
+XmlReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/4303/branches/plexil-4/checker/src/reader/XmlReader.java
+END

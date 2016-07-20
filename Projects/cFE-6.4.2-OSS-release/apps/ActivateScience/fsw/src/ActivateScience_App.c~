@@ -1,0 +1,116 @@
+/////////////////////////////////////////////////////////////////////////
+//
+//  README
+//
+//  Name: ActivateScience_App.c
+//  By: Alec Forsman - Red Canyon Software
+//  Created: 5/12/16
+//  Updated: 5/12/16
+//
+//  Description:
+//		This is a Core Flight Application intended to model the ActivateScience command in the PLEXIL
+//	  Waypoint plan. The app simply creates a pipe to receive messages, and when
+//		a message is received it will perform the corresponding neccessary functions and send data
+//		back so PLEXIL can continue to update the flight. This can be used in the future as the
+//		layout for communication between PLEXIL and CFE.
+//
+//	Updates:
+//		5/12/16
+//			- Created
+//			- Created SB pipe to receive commands from Waypoint_App.c
+//
+//	Issues/ToDo:
+//		- Interface with PLEXIL
+//		- Setup to perform neccessary calculations
+//		- Send data back to TestUdp_app.c
+//		- Get app to receive real data
+//		- Combine Command Pack structure and Command structure. Shouldn't need both
+//		- clean up
+//		- Implement error checks
+//		- NOTE: If app doesn't run, 90% of the time its an issue with the code(will still happen if it compiles)
+//
+/////////////////////////////////////////////////////////////////////////
+
+
+#include "ActivateScience_App.h"
+#include "ActivateScience_Events.h"
+#include "ActivateScience_Msgids.h"
+
+ActivateScience_AppData_t	ActivateScience_AppData;
+
+static CFE_EVS_BinFilter_t ActivateScience_EventFilters[] = 
+	{
+		{DEBUG,										0x0000},
+	};		
+		
+
+// Main Function
+void ActivateScience_AppMain(void)
+{
+	uint32 Status;
+
+	CFE_ES_RegisterApp(); // Register app w/ CFE
+	ActivateScience_init(); // initialize the app. Sets up needed params (Success returns CFE_SUCCESS)
+	
+	// ActivateScience Run Loop
+	while(CFE_ES_RunLoop(&ActivateScience_AppData.RunStatus) == TRUE)
+	{
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"Run loop entered, Run Status: %d", &ActivateScience_AppData.RunStatus);	
+	
+		Status = CFE_SB_RcvMsg(&ActivateScience_AppData.MsgPtr, ActivateScience_AppData.ActivateSciencePipe, CFE_SB_PEND_FOREVER);
+		//CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"Message Received");
+		
+		//TlmStatus = Send_Telemetry();
+		if (Status == CFE_SUCCESS);
+		{
+			CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"ACTIVATESCIENCE MESSAGE RECEIVED!!!");
+			CFE_ES_ExitApp(ActivateScience_AppData.RunStatus);
+		}
+		
+	} // End while
+	
+} // End ActivateScience_AppMain
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ActivateScience_init(void)
+{
+	int status;
+	//uint16 i;
+	//char TlmPipeName[16];
+	//uint16 TlmPipeDepth;
+	
+	CFE_EVS_Register(ActivateScience_EventFilters, sizeof(ActivateScience_EventFilters)/sizeof(CFE_EVS_BinFilter_t), CFE_EVS_BINARY_FILTER); // Register Event filter table so events can be output
+	
+	ActivateScience_AppData.RunStatus = CFE_ES_APP_RUN;
+	
+	ActivateScience_AppData.PipeDepth = ACTIVATESCIENCE_PIPE_DEPTH;
+	strcpy(ActivateScience_AppData.PipeName, "ACTIVATESCIENCE_PIPE");	
+	
+	// Create Receive (command) pipe
+	status = CFE_SB_CreatePipe(&ActivateScience_AppData.ActivateSciencePipe, ActivateScience_AppData.PipeDepth, ActivateScience_AppData.PipeName);
+	if(status != CFE_SUCCESS)
+	{
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_ERROR,"Failed to create ActivateScience pipe");
+	}
+	
+	// Subscribe
+	status = CFE_SB_Subscribe(ACTIVATESCIENCE_MID, ActivateScience_AppData.ActivateSciencePipe);
+	if(status != CFE_SUCCESS)
+	{
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_ERROR,"Failed to subscribe to ActivateScience pipe");
+		//return(status);
+	}
+	
+	//CFE_SB_InitMsg(&TestUdp_AppData.ActivateSciencePacket, TESTAPP_ACTIVATESCIENCE_MID, sizeof(TestUdp_ActivateSciencePacket_t), TRUE);
+	
+	
+	CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"ActivateScience App Initialized");
+	
+	
+} // End ActivateScience_init
+
+
+
+

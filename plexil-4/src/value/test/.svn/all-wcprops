@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/p/plexil/code/!svn/ver/4186/branches/plexil-4/src/value/test
+END
+value-test-module.cc
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/4141/branches/plexil-4/src/value/test/value-test-module.cc
+END
+valueTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/4163/branches/plexil-4/src/value/test/valueTest.cc
+END
+arrayTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/4141/branches/plexil-4/src/value/test/arrayTest.cc
+END
+valueTypeTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/4129/branches/plexil-4/src/value/test/valueTypeTest.cc
+END

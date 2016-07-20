@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/p/plexil/code/!svn/ver/4522/branches/plexil-4/src
+END
+configure.ac
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/p/plexil/code/!svn/ver/4371/branches/plexil-4/src/configure.ac
+END
+INSTALL
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/INSTALL
+END
+COPYING
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/COPYING
+END
+setup.sh
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/p/plexil/code/!svn/ver/4024/branches/plexil-4/src/setup.sh
+END
+missing
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/missing
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/p/plexil/code/!svn/ver/4452/branches/plexil-4/src/Makefile.am
+END
+NEWS
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/NEWS
+END
+aclocal.m4
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/aclocal.m4
+END
+AUTHORS
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/AUTHORS
+END
+depcomp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/depcomp
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/ChangeLog
+END
+compile
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/compile
+END
+build-for-buildroot.sh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4348/branches/plexil-4/src/build-for-buildroot.sh
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/README
+END
+ltmain.sh
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/p/plexil/code/!svn/ver/4030/branches/plexil-4/src/ltmain.sh
+END

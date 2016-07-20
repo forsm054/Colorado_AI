@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/p/plexil/code/!svn/ver/4231/branches/plexil-4/schema/test
+END
+schemas.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/schema/test/schemas.xml
+END
+pass
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/p/plexil/code/!svn/ver/4229/branches/plexil-4/schema/test/pass
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/p/plexil/code/!svn/ver/4230/branches/plexil-4/schema/test/Makefile
+END
+check
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/p/plexil/code/!svn/ver/4229/branches/plexil-4/schema/test/check
+END

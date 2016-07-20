@@ -1,0 +1,874 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//
+//  README
+//
+//  Name: Fly2A.ple
+//  By: Alec Forsman - Red Canyon Software
+//  Created: 12/29/15
+//  Updated: 1/11/16
+//
+//  Description:
+//		This is the plan for the 'Flying to A' senario for a simulation of 
+//		an aircraft flying to specified waypoints and performing science 
+//		operations. This is currently only set up to run with the simulator
+//		'Fly2A_Simulator.plx'. Also set up so that A is a straight line from origin.
+//
+//	Updates:
+//		12/29/15
+//			- Recreated 
+//			- Laid out general framework
+//		1/5/16
+//			- Got to run and updated config files
+//		1/6/16
+//			- Fixed the stop at arriving to A by adding skip conditions
+//			- Fixed print statement order by adding start conditions to each node
+//			- Got At_A to execute by removing precondition
+//			- preliminary error checks added to repeat command if simulator doesn't
+//				update lookup. NOTE: simulator may not be updating fast enought, but
+//				this shouldn't be a problem when using UDP packets...or maybe it will.
+//		1/8/16
+//			- Fixed timing errors by adding SynchronousCommand (Still need to fix GetParams)
+//			- Got rid of extraneous boolean lookups by adding SynchronousCommand
+//			- Added CheckLocation to ExecuteGetParams to update flight status
+//			- Got GetParams to print correct updated location by adding SynCom
+//			- Got SynCom to take variables by defining the variables outside of the node
+//		1/9/16
+//			- Added OnCommand "Fly2A" so it runs when called by Waypoint_Plan.ple
+//			- Updated conf file to work with Waypoint_Plan and Simulator and both A/B logic
+//			- Added Fly2B
+//			- Added A/B logic to commands so simulators can be combined
+//			- Added logic so waypoints are set in Waypoint_Plan.ple
+//		1/11/16
+//			- Start location now passed from Waypoint_Plan.ple
+//			- Update pprints to look better
+//			- Changed all set Waypoint variables to lookups and plan executed better. This
+//				made it so waypoint location variables updated everytime. (timing issue)
+//			- Put all commands in a node (except for pprint statements)
+//			- Added Pre and Post conditions where applicable. Can be used later for error checks
+//			- Got UDP message through. Apparently you can't have a udp adapter and ipc adapter defined
+//		5/16/16-5/18/16
+//			- Converted from IPC to UDP adapter
+//			- Somewhat successfully got parameters passed in using terminal, but unsuccessful when using CFE (works on totally separate script, so must be bug somewhere).
+//			- Successfully passed different parameters types over udp although not fully automated.
+//		5/19/16
+//			- Successfully able to receveive command return from CFE. (timing issue -> port wasn't open when message was sent)
+//		5/26/16
+//			- Successfully got struct of string and ints through
+//			- Successfully got struct of string and floats through
+//		5/30/16
+//			- Made command returns universal so there is only one return function (i.e. CFE will return the same data structure no matter what Plexil wants)
+//
+//	Issues/ToDo:
+//		- clean up
+//		- put if/elseif statements in a node instead with start, end, and skip conditions
+//		- Should be able to have Not_at_A exit condition to trigger at A, but doesn't work
+//		- Get parameters to be passed automatically (like by reading startup script).
+//		- Fix bug that doesn't allow udp to be passed in.
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
+// Commands emulating those sent to CoreFlight
+Command GetIC(String);
+Command TakePic(String); // Command 1
+Command UpdatePlan(String); // Command 2
+Command GetParams(String); // Command 3
+Command UpdateFlight(String); // Command 4
+Command ActivateScience(String); // Command 5
+//Command CommandReturn(String);
+// Commands used to communicate with simulator
+Command SendMessage (...);
+Command PlanComplete();
+Command SendReturnValue (...);
+// Standard plexil commands
+Command pprint (...);
+
+Waypoints:
+{
+	Boolean WaypointPlan_Success = false;
+	Real xWaypoint_A;
+	Real yWaypoint_A;
+	Real zWaypoint_A;
+	Real xWaypoint_B;
+	Real yWaypoint_B;
+	Real zWaypoint_B;
+	Real vel;
+	Real xLoc;
+	Real yLoc;
+	Real zLoc;
+	Real velTarget;
+	Real xTarget;
+	Real yTarget;
+	Real zTarget;
+	ExitCondition WaypointPlan_Success;
+	
+	pprint("######################## Initializing Plan ###############################");
+	
+	Get_InitCond:
+	{
+		
+		GetIC("GetIC");
+		
+		GetIC_Return: OnCommand "Command_Return" (String Header, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+		{
+			Boolean GetIC_Success = false;
+			PostCondition GetIC_Success;
+			
+			if Command_Success == "true"
+			{
+				xWaypoint_A = xWP_A;
+				yWaypoint_A = yWP_A;
+				zWaypoint_A = zWP_A;
+				xWaypoint_A = xWP_B;
+				yWaypoint_A = yWP_B;
+				zWaypoint_A = zWP_B;
+				vel = v;
+				xLoc = x;
+				yLoc = y;
+				zLoc = z;
+				velTarget = vel_Target;
+				xTarget = x_Target;
+				yTarget = y_Target;
+				zTarget = z_Target;
+				pprint("Initial conditions successfully obtained");
+				pprint("Parameters received: vel =",vel,"x =",xLoc,"y =",yLoc,"z =",zLoc);
+				GetIC_Success = true;
+			} // end if
+			else
+			{
+				pprint("Obtaining initial conditions FAILED!!!");
+			} // end else
+			endif
+												
+		} // End GetIC_Return
+		
+	} // End Get_InitCond
+
+	Fly2A:
+	{
+		Boolean At_A = false;
+	
+		pprint("################## Starting flight to Waypoint A #########################");
+		pprint("Waypoint A is at x =",xWaypoint_A,"y =",yWaypoint_A,"z =",zWaypoint_A);
+	
+		Not_at_A:
+		{
+			//StartCondition Get_InitCond.outcome == SUCCESS;
+			RepeatCondition !At_A;
+			PreCondition isKnown(At_A);
+			PostCondition At_A;
+		
+			pprint("#########################################################################");
+			pprint("Currently at x =",xLoc,"y =",yLoc,"z =",zLoc);
+		
+			ExecuteGetParams:
+			{
+				Real velocity;
+				Real xLocation;
+				Real yLocation;
+				Real zLocation;			
+	
+				GetParams:
+				{
+					PostCondition Command_GetParams.outcome == SUCCESS;
+			
+					pprint(" ");
+					pprint("Entering GetParams");
+				
+					Command_GetParams:
+					{
+						PostCondition CheckSuccess.outcome == SUCCESS;
+						GetParams("GetParams");
+						
+						CheckSuccess: OnCommand "Command_Return" (String Header, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+						{
+							PostCondition isKnown(Command_Success);
+							
+							xWaypoint_A = xWP_A;
+							yWaypoint_A = yWP_A;
+							zWaypoint_A = zWP_A;
+							vel = v;
+							xLoc = x;
+							yLoc = y;
+							zLoc = z;
+							
+							if Command_Success == "true"
+							{
+								pprint("Parameters successfully obtained");
+								pprint("Parameters received: vel =",vel,"x =",xLoc,"y =",yLoc,"z =",zLoc);
+							} // end if
+							else
+							{
+								pprint("Obtaining parameters FAILED!!!");
+							} // end else
+							endif
+														
+						} // End CheckSuccess
+							
+					} // End Command_GetParams
+				} // End GetParams
+			
+				CheckLocation: Concurrence
+				{
+					PostCondition EnRoute_to_A.outcome == SUCCESS || Arriving_at_A.outcome == SUCCESS || Arrived_at_A.outcome == SUCCESS;
+								
+					EnRoute_to_A:
+					{
+						StartCondition (xWaypoint_A - xLoc) > 1 || (yWaypoint_A - yLoc) > 1 || (zWaypoint_A - zLoc) > 1;
+						SkipCondition (xWaypoint_A - xLoc) <= 1 && (yWaypoint_A - yLoc) <= 1 && (zWaypoint_A - zLoc) <= 1;
+				
+						pprint("Updated Flight Status: Maintaing Route to A");
+				
+					} // end EnRoute_to_A
+			
+					Arriving_at_A:
+					{
+						//Boolean ScienceActivated;
+						StartCondition (xWaypoint_A - xLoc) <= 1 && (yWaypoint_A - yLoc) <= 1 && (zWaypoint_A - zLoc) <= 1;
+						SkipCondition (xWaypoint_A - xLoc) > 1 || (yWaypoint_A - yLoc) > 1 || (zWaypoint_A - zLoc) > 1 || ((xWaypoint_A - xLoc) == 0 && (yWaypoint_A - yLoc) == 0 && (zWaypoint_A - zLoc) == 0);
+						PostCondition Command_ActivateScience.outcome == SUCCESS;
+	
+						pprint("Updated Flight Status: Arriving at A");
+						pprint("Activating science to perform at Waypoint A");
+						
+						Command_ActivateScience:
+						{
+							PostCondition CheckSuccess.outcome == SUCCESS;
+							ActivateScience("ActivateScience");
+							
+							CheckSuccess: OnCommand "Command_Return" (String Header, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+							{
+								PostCondition isKnown(Command_Success);
+	
+								if Command_Success == "true"
+								{
+									pprint("Science successfully activated");
+								} // end if
+								else
+								{
+									pprint("Science activation FAILED!!!");
+								} // end else
+								endif
+							} // End CheckSuccess
+						} // End Command_ActivateScience
+
+					} // end Arriving_at_A
+						
+					Arrived_at_A:
+					{
+						StartCondition xLoc == xWaypoint_A && yLoc == yWaypoint_A && zLoc == zWaypoint_A;
+						SkipCondition xLoc != xWaypoint_A || yLoc != yWaypoint_A || zLoc != zWaypoint_A;
+						EndCondition At_A;
+						PostCondition isKnown(At_A);
+			
+						At_A = true;
+			
+					} // end Arrived_at_A
+		
+				} // end CheckLocation
+			
+			} // end ExecuteGetParams
+		
+			MonitorParams:
+			{
+				// Expected parameter values
+				//Real xTarget = 10;//xWaypoint_A;
+				//Real yTarget = 0;//yWaypoint_A;
+				//Real zTarget = 5;//zWaypoint_A;
+				//Real velTarget = 1;
+				// Actual parameter values
+				Real velState;
+				Real xState;
+				Real yState;
+				Real zState;
+				// Update parameter logic
+				Real velFlag; // NEED THESE FROM GET PARAMS
+				Real xFlag;
+				Real yFlag;
+				Real zFlag;
+				SkipCondition At_A;
+			
+				pprint(" ");
+				pprint("Entering MonitorParams");
+		
+				Velocity:
+				{
+					PreCondition isKnown(velTarget);
+					PostCondition isKnown(velFlag);
+				
+					pprint("Determining velocity update");
+				
+					velState = vel - velTarget; // add tolerance logic
+				
+					if velState < 0
+					{
+						velFlag = 1; // Increase velocity
+					} // End if
+					elseif velState > 0
+					{
+						velFlag = -1; // Decrease velocity
+					} // end elseif
+					else
+					{
+						velFlag = 0; // Maintain velocity
+					} // end else
+					endif
+			
+				} // End Velocity
+			
+				Location:
+				{
+					StartCondition Velocity.state == FINISHED;
+					PreCondition isKnown(xTarget) && isKnown(yTarget) && isKnown(zTarget);
+					PostCondition isKnown(xFlag) && isKnown(yFlag) && isKnown(zFlag);
+				
+					xState = xLoc - xTarget; // add tolerance logic
+					yState = yLoc - yTarget; // add tolerance logic
+					zState = zLoc - zTarget; // add tolerance logic
+				
+					xLocation:
+					{
+				
+						pprint("Determining x coordinate update");
+				
+						if xState < 0
+						{
+							xFlag = 1; // Increase xLoc
+						} // end if
+						elseif xState > 0
+						{
+							xFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							xFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end xLocation
+	
+					yLocation:
+					{
+						StartCondition xLocation.state == FINISHED;
+				
+						pprint("Determining y coordinate update");
+				
+						if yState < 0
+						{
+							yFlag = 1; // Increase xLoc
+						} // end if
+						elseif yState > 0
+						{
+							yFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							yFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end yLocation
+
+					zLocation:
+					{
+						StartCondition yLocation.state == FINISHED;
+				
+						pprint("Determining z coordinate update");
+				
+						if zState < 0
+						{
+							zFlag = 1; // Increase xLoc
+						} // end if
+						elseif zState > 0
+						{
+							zFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							zFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end zLocation
+				
+					pprint("Updating Flight Parameters: velFlag =",velFlag,"xFlag =",xFlag,"yFlag =",yFlag,"zFlag =",zFlag);
+					UpdateFlight("UpdateFlight");
+					
+					CheckSuccess: OnCommand "Command_Return" (String Heade, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+					{
+						PostCondition isKnown(Command_Success);
+						
+						if Command_Success == "true"
+						{
+							pprint("Flight successfully updated");
+							//pprint("Parameters received: vel =",vel,"x =",xLoc,"y =",yLoc,"z =",zLoc);
+						} // end if
+						else
+						{
+							pprint("FAILED updating flight");
+						} // end else
+						endif
+													
+					} // End CheckSuccess
+		
+				} // End Location
+		
+			} // End MonitorParams
+	
+		} // End Not_at_A
+	
+		Arrived_at_A:
+		{
+			StartCondition At_A;
+			PreCondition Not_at_A.state == FINISHED;
+		
+			pprint("Updated Flight Status: Arrived at A!");
+		
+			PerformScience:
+			{
+				//Boolean PicTaken;			
+				//PostCondition PicTaken; // Science Successful
+			
+				pprint(" ");
+				pprint("Performing Science at Waypoint A");
+			
+				Command_TakePic:
+				{
+					PostCondition CheckSuccess.outcome == SUCCESS;
+					
+					TakePic("TakePic");	
+							
+					CheckSuccess: OnCommand "Command_Return" (String Header, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+					{
+						PostCondition isKnown(Command_Success);
+						
+						if Command_Success == "true"
+						{
+							pprint("Science at Waypoint A successful!");
+						}
+						else
+						{
+							pprint("Failed performing science at Waypoint A");
+						}
+						endif
+					} // End CheckSuccess
+					
+				} // End Command_TakePic
+		
+			} // End Perform Science
+		
+			UpdatePlan:
+			{
+				//Boolean PlanUpdated;		
+				//PostCondition PlanUpdated;
+			
+				pprint(" ");
+				pprint("Updating Waypoint Plan");
+			
+				Command_UpdatePlan:
+				{
+					PostCondition CheckSuccess.outcome == SUCCESS;
+					
+					UpdatePlan("UpdatePlan");
+					
+					CheckSuccess: OnCommand "Command_Return" (String Header, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+					{
+						PostCondition isKnown(Command_Success);
+						
+						if Command_Success == "true"
+						{
+							pprint("Plan Updated successfully");
+						}
+						else
+						{
+							pprint("Plan update FAILED!!!");
+						}
+						endif
+					} // End CheckSuccess
+					
+				} // End Command_UpdatePlan
+		
+			} // End UpdatePlan
+	
+		} // End Arrived_at_A
+
+	} // End Fly2A
+
+	Fly2B:
+	{
+		Boolean At_B = false;
+		
+		GetParams("GetParams");
+		
+		CheckSuccess: OnCommand "Command_Return" (String Header, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+		{
+			PostCondition isKnown(Command_Success);
+			
+			xWaypoint_B = xWP_B;
+			yWaypoint_B = yWP_B;
+			zWaypoint_B = zWP_B;
+			vel = v;
+			xLoc = x;
+			yLoc = y;
+			zLoc = z;
+			
+			if Command_Success == "true"
+			{
+				pprint("Parameters successfully obtained");
+				pprint("Parameters received: vel =",vel,"x =",xLoc,"y =",yLoc,"z =",zLoc);
+			} // end if
+			else
+			{
+				pprint("Obtaining parameters FAILED!!!");
+			} // end else
+			endif
+										
+		} // End CheckSuccess
+	
+		pprint("#########################################################################");
+		pprint("#########################################################################");
+		pprint("#########################################################################");
+		pprint("#########################################################################");
+		pprint("#########################################################################");
+		
+		pprint(" ");
+		pprint("##################### Starting flight to Waypoint B #####################");
+		pprint("Waypoint B is at x =",xWaypoint_B,"y =",yWaypoint_B,"z =",zWaypoint_B); 
+	
+		Not_at_B:
+		{
+			StartCondition !At_B;
+			RepeatCondition !At_B;
+			PreCondition isKnown(At_B);
+		
+			pprint("#########################################################################");
+			pprint("Currently at x =",xLoc,"y =",yLoc,"z =",zLoc);
+		
+			ExecuteGetParams:
+			{
+				Real velocity;
+				Real xLocation;
+				Real yLocation;
+				Real zLocation;
+	
+				GetParams:
+				{
+					PostCondition Command_GetParams.outcome == SUCCESS;
+			
+					pprint(" ");
+					pprint("Entering GetParams");
+				
+					Command_GetParams:
+					{
+						PostCondition CheckSuccess.outcome == SUCCESS;
+						GetParams("GetParams");
+						
+						CheckSuccess: OnCommand "Command_Return" (String Header, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+						{
+							PostCondition isKnown(Command_Success);
+							
+							xWaypoint_A = xWP_A;
+							yWaypoint_A = yWP_A;
+							zWaypoint_A = zWP_A;
+							vel = v;
+							xLoc = x;
+							yLoc = y;
+							zLoc = z;
+							
+							if Command_Success == "true"
+							{
+								pprint("Parameters successfully obtained");
+								pprint("Parameters received: vel =",vel,"x =",xLoc,"y =",yLoc,"z =",zLoc);
+							} // end if
+							else
+							{
+								pprint("Obtaining parameters FAILED!!!");
+							} // end else
+							endif
+														
+						} // End CheckSuccess
+							
+					} // End Command_GetParams
+				} // End GetParams
+			
+				CheckLocation: Concurrence
+				{
+					PostCondition EnRoute_to_B.outcome == SUCCESS || Arriving_at_B.outcome == SUCCESS || Arrived_at_B.outcome == SUCCESS;
+								
+					EnRoute_to_B:
+					{
+						StartCondition (xWaypoint_B - xLoc) > 1 || (yWaypoint_B - yLoc) > 1 || (zWaypoint_B - zLoc) > 1;
+						SkipCondition (xWaypoint_B - xLoc) <= 1 && (yWaypoint_B - yLoc) <= 1 && (zWaypoint_B - zLoc) <= 1;
+				
+						pprint("Updated Flight Status: Maintaing Route to B");
+				
+					} // end EnRoute_to_B
+			
+					Arriving_at_B:
+					{
+						//Boolean ScienceActivated;
+						StartCondition (xWaypoint_B - xLoc) <= 1 && (yWaypoint_B - yLoc) <= 1 && (zWaypoint_B - zLoc) <= 1;
+						SkipCondition (xWaypoint_B - xLoc) > 1 || (yWaypoint_B - yLoc) > 1 || (zWaypoint_B - zLoc) > 1 || ((xWaypoint_B - xLoc) == 0 && (yWaypoint_B - yLoc) == 0 && (zWaypoint_B - zLoc) == 0);
+						PostCondition Command_ActivateScience.outcome == SUCCESS;
+	
+						pprint("Updated Flight Status: Arriving at B");
+						pprint("Activating science to perform at Waypoint B");
+						
+						Command_ActivateScience:
+						{
+							PostCondition CheckSuccess.outcome == SUCCESS;
+							ActivateScience("ActivateScience");
+							
+							CheckSuccess: OnCommand "Command_Return" (String Header, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+							{
+								PostCondition isKnown(Command_Success);
+	
+								if Command_Success == "true"
+								{
+									pprint("Science successfully activated");
+								} // end if
+								else
+								{
+									pprint("Science activation FAILED!!!");
+								} // end else
+								endif
+							} // End CheckSuccess
+						} // End Command_ActivateScience
+
+					} // end Arriving_at_B
+						
+					Arrived_at_B:
+					{
+						StartCondition xLoc == xWaypoint_B && yLoc == yWaypoint_B && zLoc == zWaypoint_B;
+						SkipCondition xLoc != xWaypoint_B || yLoc != yWaypoint_B || zLoc != zWaypoint_B;
+						EndCondition At_B;
+						PostCondition isKnown(At_B);
+			
+						At_B = true;
+			
+					} // end Arrived_at_B
+		
+				} // end CheckLocation
+			
+			} // end ExecuteGetParams
+		
+			MonitorParams:
+			{
+				// Expected parameter values
+				//Real xTarget = 10; 
+				//Real yTarget = 10; // needs to be updated
+				//Real zTarget = 5;
+				//Real velTarget = 1;
+				// Actual parameter values
+				Real velState;
+				Real xState;
+				Real yState;
+				Real zState;
+				// Update parameter values
+				Integer velFlag;
+				Integer xFlag;
+				Integer yFlag;
+				Integer zFlag;
+				SkipCondition At_B;
+			
+				pprint(" ");
+				pprint("Entering MonitorParams");
+		
+				Velocity:
+				{
+					PreCondition isKnown(velTarget);
+					PostCondition isKnown(velFlag);
+				
+					pprint("Determining velocity update");
+				
+					velState = vel - velTarget; // add tolerance logic
+				
+					if velState < 0
+					{
+						velFlag = 1; // Increase velocity
+					} // End if
+					elseif velState > 0
+					{
+						velFlag = -1; // Decrease velocity
+					} // end elseif
+					else
+					{
+						velFlag = 0; // Maintain velocity
+					} // end else
+					endif
+			
+				} // End Velocity
+			
+				Location:
+				{
+					StartCondition Velocity.state == FINISHED;
+					PreCondition isKnown(xTarget) && isKnown(yTarget) && isKnown(zTarget);
+					PostCondition isKnown(xFlag) && isKnown(yFlag) && isKnown(zFlag);
+				
+					xState = xLoc - xTarget; // add tolerance logic
+					yState = yLoc - yTarget; // add tolerance logic
+					zState = zLoc - zTarget; // add tolerance logic
+				
+					xLocation:
+					{
+				
+						pprint("Determining x coordinate update");
+				
+						if xState < 0
+						{
+							xFlag = 1; // Increase xLoc
+						} // end if
+						elseif xState > 0
+						{
+							xFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							xFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end xLocation
+	
+					yLocation:
+					{
+						StartCondition xLocation.state == FINISHED;
+				
+						pprint("Determining y coordinate update");
+				
+						if yState < 0
+						{
+							yFlag = 1; // Increase xLoc
+						} // end if
+						elseif yState > 0
+						{
+							yFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							yFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end yLocation
+
+					zLocation:
+					{
+						StartCondition yLocation.state == FINISHED;
+				
+						pprint("Determining z coordinate update");
+				
+						if zState < 0
+						{
+							zFlag = 1; // Increase xLoc
+						} // end if
+						elseif zState > 0
+						{
+							zFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							zFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end zLocation
+				
+					pprint("Updating Flight Parameters: velFlag =",velFlag,"xFlag =",xFlag,"yFlag =",yFlag,"zFlag =",zFlag);
+					UpdateFlight("UpdateFlight");
+					
+					CheckSuccess: OnCommand "Command_Return" (String Heade, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+					{
+						PostCondition isKnown(Command_Success);
+						
+						if Command_Success == "true"
+						{
+							pprint("Flight successfully updated");
+							//pprint("Parameters received: vel =",vel,"x =",xLoc,"y =",yLoc,"z =",zLoc);
+						} // end if
+						else
+						{
+							pprint("FAILED updating flight");
+						} // end else
+						endif
+													
+					} // End CheckSuccess
+		
+				} // End Location
+		
+			} // End MonitorParams
+	
+		} // End Not_at_B
+	
+		Arrived_at_B:
+		{
+			StartCondition At_B;
+			//PreCondition Not_at_B.state == FINISHED; // This doesn't work, could change to outcome -> success
+		
+			pprint("Updated Flight Status: Arrived at B!");
+		
+			PerformScience:
+			{
+				//Boolean PicTaken;			
+				//PostCondition PicTaken; // Science Successful
+			
+				pprint(" ");
+				pprint("Performing Science at Waypoint B");
+			
+				Command_TakePic:
+				{
+					PostCondition CheckSuccess.outcome == SUCCESS;
+					
+					TakePic("TakePic");	
+							
+					CheckSuccess: OnCommand "Command_Return" (String Header, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+					{
+						PostCondition isKnown(Command_Success);
+						
+						if Command_Success == "true"
+						{
+							pprint("Science at Waypoint B successful!");
+						}
+						else
+						{
+							pprint("Failed performing science at Waypoint B");
+						}
+						endif
+					} // End CheckSuccess
+					
+				} // End Command_TakePic
+		
+			} // End Perform Science
+		
+			UpdatePlan:
+			{
+				//Boolean PlanUpdated;		
+				//PostCondition PlanUpdated;
+			
+				pprint(" ");
+				pprint("Updating Waypoint Plan");
+			
+				Command_UpdatePlan:
+				{
+					PostCondition CheckSuccess.outcome == SUCCESS;
+					
+					UpdatePlan("UpdatePlan");
+					
+					CheckSuccess: OnCommand "Command_Return" (String Header, String Command_Success, Real xWP_A, Real yWP_A, Real zWP_A, Real xWP_B, Real yWP_B, Real zWP_B, Real v, Real x, Real y, Real z, Real vel_Target, Real x_Target, Real y_Target, Real z_Target, Integer x_Flag, Integer y_Flag, Integer z_Flag, String WP)
+					{
+						PostCondition isKnown(Command_Success);
+						
+						if Command_Success == "true"
+						{
+							pprint("Plan Updated successfully");
+							WaypointPlan_Success = true;
+						}
+						else
+						{
+							pprint("Plan update FAILED!!!");
+						}
+						endif
+					} // End CheckSuccess
+					
+				} // End Command_UpdatePlan
+		
+			} // End UpdatePlan
+	
+		} // End Arrived_at_B
+
+	} // End Fly2B
+
+} // End Waypoints

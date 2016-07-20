@@ -1,0 +1,11 @@
+#ifndef _Fly2A_Msgids_h_
+#define _Fly2A_Msgids_h_
+
+
+#define FLY2A_MID         			0x1882
+#define MONITORSTATE_MID				0x1886
+
+#define FLY2A_RETURN_MID				0x1900
+#define MONITORSTATE_RETURN_MID	0x1904
+
+#endif

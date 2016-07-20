@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/p/plexil/code/!svn/ver/4488/branches/plexil-4/examples/sample-app
+END
+sample_system.cc
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/sample-app/sample_system.cc
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/p/plexil/code/!svn/ver/4488/branches/plexil-4/examples/sample-app/Makefile
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/sample-app/README
+END
+SampleAdapter.hh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/sample-app/SampleAdapter.hh
+END
+subscriber.hh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/sample-app/subscriber.hh
+END
+interface-config.xml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/sample-app/interface-config.xml
+END
+sample_system.hh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/sample-app/sample_system.hh
+END
+Debug.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/sample-app/Debug.cfg
+END
+SampleAdapter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/4243/branches/plexil-4/examples/sample-app/SampleAdapter.cc
+END
+subscriber.cc
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/sample-app/subscriber.cc
+END

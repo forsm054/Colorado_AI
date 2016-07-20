@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/p/plexil/code/!svn/ver/4240/branches/plexil-4/src/xml-parser/test
+END
+commandXmlParserTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/p/plexil/code/!svn/ver/4180/branches/plexil-4/src/xml-parser/test/commandXmlParserTest.cc
+END
+parser-test-module.cc
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/p/plexil/code/!svn/ver/4185/branches/plexil-4/src/xml-parser/test/parser-test-module.cc
+END
+updateXmlParserTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/p/plexil/code/!svn/ver/4085/branches/plexil-4/src/xml-parser/test/updateXmlParserTest.cc
+END
+FactoryTestNodeConnector.hh
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/p/plexil/code/!svn/ver/4157/branches/plexil-4/src/xml-parser/test/FactoryTestNodeConnector.hh
+END
+functionXmlParserTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/4045/branches/plexil-4/src/xml-parser/test/functionXmlParserTest.cc
+END
+nodeXmlParserTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/p/plexil/code/!svn/ver/4184/branches/plexil-4/src/xml-parser/test/nodeXmlParserTest.cc
+END
+variableXmlParserTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/4083/branches/plexil-4/src/xml-parser/test/variableXmlParserTest.cc
+END
+TrivialNodeConnector.hh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/p/plexil/code/!svn/ver/4157/branches/plexil-4/src/xml-parser/test/TrivialNodeConnector.hh
+END
+constantXmlParserTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/4109/branches/plexil-4/src/xml-parser/test/constantXmlParserTest.cc
+END
+lookupXmlParserTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/p/plexil/code/!svn/ver/4045/branches/plexil-4/src/xml-parser/test/lookupXmlParserTest.cc
+END
+FactoryTestNodeConnector.cc
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/p/plexil/code/!svn/ver/4157/branches/plexil-4/src/xml-parser/test/FactoryTestNodeConnector.cc
+END
+benchmark.cc
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/4167/branches/plexil-4/src/xml-parser/test/benchmark.cc
+END
+TrivialNodeConnector.cc
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/p/plexil/code/!svn/ver/4157/branches/plexil-4/src/xml-parser/test/TrivialNodeConnector.cc
+END
+arrayReferenceXmlParserTest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/p/plexil/code/!svn/ver/4240/branches/plexil-4/src/xml-parser/test/arrayReferenceXmlParserTest.cc
+END

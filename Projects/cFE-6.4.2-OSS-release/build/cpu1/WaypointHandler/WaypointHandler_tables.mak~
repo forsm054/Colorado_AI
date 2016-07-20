@@ -1,0 +1,4 @@
+
+default:
+ bash ./../elf2cfetbl/elf2cfetbl InitCond_Table.o
+

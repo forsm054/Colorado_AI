@@ -1,0 +1,251 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/p/plexil/code/!svn/ver/4513/branches/plexil-4/src/app-framework
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/app-framework/Makefile.am
+END
+ListenerFilters.hh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/ListenerFilters.hh
+END
+ExecListenerFilterFactory.cc
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/p/plexil/code/!svn/ver/4030/branches/plexil-4/src/app-framework/ExecListenerFilterFactory.cc
+END
+SimpleInputQueue.hh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/app-framework/SimpleInputQueue.hh
+END
+PosixTimeAdapter.hh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/PosixTimeAdapter.hh
+END
+TimeAdapter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/4377/branches/plexil-4/src/app-framework/TimeAdapter.cc
+END
+ExecListenerHub.hh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/4030/branches/plexil-4/src/app-framework/ExecListenerHub.hh
+END
+DarwinTimeAdapter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/p/plexil/code/!svn/ver/4510/branches/plexil-4/src/app-framework/DarwinTimeAdapter.cc
+END
+ExecListener.hh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/4030/branches/plexil-4/src/app-framework/ExecListener.hh
+END
+UtilityAdapter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/UtilityAdapter.cc
+END
+InterfaceManager.hh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/4018/branches/plexil-4/src/app-framework/InterfaceManager.hh
+END
+DummyAdapter.hh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/DummyAdapter.hh
+END
+ExecApplication.cc
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/4513/branches/plexil-4/src/app-framework/ExecApplication.cc
+END
+ExecListenerFilter.hh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4030/branches/plexil-4/src/app-framework/ExecListenerFilter.hh
+END
+InterfaceAdapter.hh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/InterfaceAdapter.hh
+END
+PlexilListener.hh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/4037/branches/plexil-4/src/app-framework/PlexilListener.hh
+END
+ListenerFilters.cc
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/ListenerFilters.cc
+END
+SimpleInputQueue.cc
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/app-framework/SimpleInputQueue.cc
+END
+AdapterExecInterface.hh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/p/plexil/code/!svn/ver/4151/branches/plexil-4/src/app-framework/AdapterExecInterface.hh
+END
+PosixTimeAdapter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/PosixTimeAdapter.cc
+END
+AdapterConfiguration.hh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/p/plexil/code/!svn/ver/4375/branches/plexil-4/src/app-framework/AdapterConfiguration.hh
+END
+AdapterFactory.hh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/AdapterFactory.hh
+END
+ExecListenerHub.cc
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/4030/branches/plexil-4/src/app-framework/ExecListenerHub.cc
+END
+ExecListener.cc
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/4030/branches/plexil-4/src/app-framework/ExecListener.cc
+END
+SerializedInputQueue.hh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/app-framework/SerializedInputQueue.hh
+END
+InterfaceManager.cc
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/4511/branches/plexil-4/src/app-framework/InterfaceManager.cc
+END
+DummyAdapter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/DummyAdapter.cc
+END
+ExecListenerFactory.hh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/ExecListenerFactory.hh
+END
+ExecListenerFilter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4030/branches/plexil-4/src/app-framework/ExecListenerFilter.cc
+END
+InterfaceAdapter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/InterfaceAdapter.cc
+END
+ExecListenerFilterFactory.hh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/p/plexil/code/!svn/ver/4030/branches/plexil-4/src/app-framework/ExecListenerFilterFactory.hh
+END
+AdapterExecInterface.cc
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/p/plexil/code/!svn/ver/4151/branches/plexil-4/src/app-framework/AdapterExecInterface.cc
+END
+AdapterConfiguration.cc
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/p/plexil/code/!svn/ver/4460/branches/plexil-4/src/app-framework/AdapterConfiguration.cc
+END
+AdapterFactory.cc
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/AdapterFactory.cc
+END
+TimeAdapter.hh
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/TimeAdapter.hh
+END
+DarwinTimeAdapter.hh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/DarwinTimeAdapter.hh
+END
+UtilityAdapter.hh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/UtilityAdapter.hh
+END
+SerializedInputQueue.cc
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/app-framework/SerializedInputQueue.cc
+END
+app-framework.dox
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/app-framework/app-framework.dox
+END
+ExecApplication.hh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/4512/branches/plexil-4/src/app-framework/ExecApplication.hh
+END
+ExecListenerFactory.cc
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/p/plexil/code/!svn/ver/3974/branches/plexil-4/src/app-framework/ExecListenerFactory.cc
+END

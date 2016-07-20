@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt
+END
+main.js
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt/main.js
+END
+showTokens.js
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt/showTokens.js
+END
+grid.js
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt/grid.js
+END
+getAndConvertTokens.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt/getAndConvertTokens.js
+END
+addons.js
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt/addons.js
+END
+detailsBox.js
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt/detailsBox.js
+END
+shortcuts.js
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt/shortcuts.js
+END
+styles.css
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt/styles.css
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt/README
+END
+sizing.js
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/viewers/gantt/sizing.js
+END

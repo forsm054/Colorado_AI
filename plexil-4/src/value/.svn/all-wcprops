@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/p/plexil/code/!svn/ver/4507/branches/plexil-4/src/value
+END
+Value.hh
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/p/plexil/code/!svn/ver/4438/branches/plexil-4/src/value/Value.hh
+END
+Array.hh
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/value/Array.hh
+END
+ValueType.hh
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4438/branches/plexil-4/src/value/ValueType.hh
+END
+ArrayFwd.hh
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/value/ArrayFwd.hh
+END
+ArrayImpl.hh
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/value/ArrayImpl.hh
+END
+CommandHandle.cc
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/value/CommandHandle.cc
+END
+NodeConstants.hh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/value/NodeConstants.hh
+END
+Value.cc
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/p/plexil/code/!svn/ver/4250/branches/plexil-4/src/value/Value.cc
+END
+Array.cc
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/value/Array.cc
+END
+ValueType.cc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4507/branches/plexil-4/src/value/ValueType.cc
+END
+ArrayImpl.cc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/value/ArrayImpl.cc
+END
+NodeConstants.cc
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/value/NodeConstants.cc
+END
+CommandHandle.hh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/value/CommandHandle.hh
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/p/plexil/code/!svn/ver/4452/branches/plexil-4/src/value/Makefile.am
+END

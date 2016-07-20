@@ -1,0 +1,33 @@
+subscriber.o: subscriber.cc subscriber.hh
+sample_system.o: sample_system.cc subscriber.hh
+SampleAdapter.o: SampleAdapter.cc SampleAdapter.hh \
+ /home/al/Desktop/plexil-4/include/Command.hh \
+ /home/al/Desktop/plexil-4/include/CommandHandleVariable.hh \
+ /home/al/Desktop/plexil-4/include/CommandHandle.hh \
+ /home/al/Desktop/plexil-4/include/ExpressionImpl.hh \
+ /home/al/Desktop/plexil-4/include/Expression.hh \
+ /home/al/Desktop/plexil-4/include/Array.hh \
+ /home/al/Desktop/plexil-4/include/ValueType.hh \
+ /home/al/Desktop/plexil-4/include/ParserException.hh \
+ /home/al/Desktop/plexil-4/include/ArrayFwd.hh \
+ /home/al/Desktop/plexil-4/include/plexil-config.h \
+ /home/al/Desktop/plexil-4/include/ExpressionListener.hh \
+ /home/al/Desktop/plexil-4/include/NotifierImpl.hh \
+ /home/al/Desktop/plexil-4/include/State.hh \
+ /home/al/Desktop/plexil-4/include/Value.hh \
+ /home/al/Desktop/plexil-4/include/SimpleBooleanVariable.hh \
+ /home/al/Desktop/plexil-4/include/AssignableImpl.hh \
+ /home/al/Desktop/plexil-4/include/Assignable.hh \
+ /home/al/Desktop/plexil-4/include/ArrayImpl.hh \
+ /home/al/Desktop/plexil-4/include/InterfaceAdapter.hh \
+ /home/al/Desktop/plexil-4/include/pugixml.hpp \
+ /home/al/Desktop/plexil-4/include/pugiconfig.hpp \
+ /home/al/Desktop/plexil-4/include/Value.hh subscriber.hh \
+ sample_system.hh \
+ /home/al/Desktop/plexil-4/include/AdapterConfiguration.hh \
+ /home/al/Desktop/plexil-4/include/InterfaceAdapter.hh \
+ /home/al/Desktop/plexil-4/include/AdapterFactory.hh \
+ /home/al/Desktop/plexil-4/include/AdapterExecInterface.hh \
+ /home/al/Desktop/plexil-4/include/Debug.hh \
+ /home/al/Desktop/plexil-4/include/plexil-config.h \
+ /home/al/Desktop/plexil-4/include/StateCacheEntry.hh

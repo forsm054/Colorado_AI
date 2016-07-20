@@ -1,0 +1,137 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/p/plexil/code/!svn/ver/4503/branches/plexil-4/schema
+END
+core-plexil.rnc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4458/branches/plexil-4/schema/core-plexil.rnc
+END
+safe-plexil.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/schema/safe-plexil.xsd
+END
+core-plexil-draft.rng
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/schema/core-plexil-draft.rng
+END
+core-plexil.rng
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4458/branches/plexil-4/schema/core-plexil.rng
+END
+extended-plexil.rnc
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4458/branches/plexil-4/schema/extended-plexil.rnc
+END
+summarize-plexil.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/schema/summarize-plexil.xsl
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/p/plexil/code/!svn/ver/4424/branches/plexil-4/schema/Makefile
+END
+plexil.rnc
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/schema/plexil.rnc
+END
+core-plexil-draft.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/schema/core-plexil-draft.xsd
+END
+plexil-script.rnc
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/4458/branches/plexil-4/schema/plexil-script.rnc
+END
+extended-plexil.rng
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4458/branches/plexil-4/schema/extended-plexil.rng
+END
+core-plexil.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4239/branches/plexil-4/schema/core-plexil.xsd
+END
+plexil-script.rng
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/4458/branches/plexil-4/schema/plexil-script.rng
+END
+extended-plexil.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4330/branches/plexil-4/schema/extended-plexil.xsd
+END
+rncfix
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/p/plexil/code/!svn/ver/4348/branches/plexil-4/schema/rncfix
+END
+safe-plexil.rnc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4458/branches/plexil-4/schema/safe-plexil.rnc
+END
+plexil-script.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/schema/plexil-script.xsd
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/schema/README
+END
+translate-plexil.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/4503/branches/plexil-4/schema/translate-plexil.xsl
+END
+safe-plexil.rng
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4458/branches/plexil-4/schema/safe-plexil.rng
+END
+plexil-base.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4458/branches/plexil-4/schema/plexil-base.xsd
+END
+core-plexil-draft.rnc
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/schema/core-plexil-draft.rnc
+END

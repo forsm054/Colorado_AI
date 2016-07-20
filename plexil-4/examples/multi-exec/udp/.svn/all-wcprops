@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/p/plexil/code/!svn/ver/4521/branches/plexil-4/examples/multi-exec/udp
+END
+test-recv.ple
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/4519/branches/plexil-4/examples/multi-exec/udp/test-recv.ple
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/4356/branches/plexil-4/examples/multi-exec/udp/Makefile
+END
+Debug.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/4324/branches/plexil-4/examples/multi-exec/udp/Debug.cfg
+END
+test-send.ple
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/4519/branches/plexil-4/examples/multi-exec/udp/test-send.ple
+END
+udp.xml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/4521/branches/plexil-4/examples/multi-exec/udp/udp.xml
+END

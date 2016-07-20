@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/temporal
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/temporal/README
+END
+timed-iteration.ple
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/temporal/timed-iteration.ple
+END
+date2.ple
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/temporal/date2.ple
+END
+TimedIterationTest.ple
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/examples/temporal/TimedIterationTest.ple
+END

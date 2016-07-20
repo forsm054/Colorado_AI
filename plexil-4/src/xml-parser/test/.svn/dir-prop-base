@@ -1,0 +1,9 @@
+K 10
+svn:ignore
+V 46
+.deps
+.dirstamp
+benchmark
+parser-module-tests
+
+END

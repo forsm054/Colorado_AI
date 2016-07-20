@@ -1,0 +1,116 @@
+/////////////////////////////////////////////////////////////////////////
+//
+//  README
+//
+//  Name: Waypoint_Plan.ple
+//  By: Alec Forsman - Red Canyon Software
+//  Created: 12/29/15
+//  Updated: 1/11/16
+//
+//  Description:
+//		This is the main plan for the simulation of an aircraft flying to
+//		specified waypoints and performing science operations. This plan
+//		will receive commands for which waypoint to fly to and execute the 
+//		corresponding subplan.
+//
+//	Updates:
+//		12/29/15
+//			- Recreated 
+//		1/8/16
+//			- Added command logic
+//			- Updated conf file
+//		1/9/16
+//			- Got to run with Fly2A.ple and Fly2A_Simulator.ple
+//			- Added B logic and got to run with Fly2WP and its simulator
+//			- Got to complete correctly by adding exit condition to Fly2WP
+//			- Added logic to set waypoints and made them lookups
+//		1/11/16
+//			- Got bash script to execute correctly by adding sleeps
+//			- Avoided plan using same lookups by passing start location and velocity to the simulator and
+//				having the simulator update instead. This way, the start location can still be set
+//				in this script.
+//			- Above was also done for WP locations
+//			- Updated so this script has no Lookups or UpdateLookups. All variables are set in this script and passed
+//				to the other scripts
+//			- Successfully executes and ends as expected
+//			- Added Command node w/ start condition to fix timing issues. (Commands were exectuing too soon)
+//			- Update conf file to have no external lookups or lookups
+//			- Added Pre and Post conditions where applicable. Can be used for error checks later.
+//		5/16/16-5/18/16
+//			- Converted from IPC to UDP adapter
+//
+//	Issues/ToDo:
+//		- Set up to run and communicate with BBB
+//		- clean up
+//
+/////////////////////////////////////////////////////////////////////////
+
+// Lookup Variables
+// Commands used to execute plan
+Command Fly2A(String);
+Command Fly2B(String);
+// Commands used to communicate with simulators
+Command SendMessage (...);
+// Standard plexil commands
+Command pprint (...);
+
+
+//FIXME: Implement Error Checks and such
+WaypointPlan: Concurrence
+{
+	Boolean A_Complete = false;
+	Boolean B_Complete = false;
+	ExitCondition A_Complete && B_Complete; // End when plan complete
+		
+	// Command the A/C to fly to WP A
+	Command_Fly2A:
+	{
+		Boolean Fly2A_Success;
+		PostCondition A_Complete;
+		
+		Fly2A("Fly2A");
+		pprint("############################### Executing Fly2A ###############################");
+		
+		CheckSuccess: OnCommand "CommandReturn" (String header, String cmd, Boolean Fly2A_Success)
+		{
+			if Fly2A_Success
+			{
+				pprint("Successfully arrived at A");
+				A_Complete = true; // Successfully flown to WP A
+			} // End if
+			else
+			{
+				pprint("Flight to A has FAILED");
+			} // End else
+			endif
+		} // End CheckSuccess
+		
+	} // End Command_Fly2A
+		
+		// Command the A/C to fly to WP B (sends to Fly2WP.ple)
+	Command_Fly2B:
+	{
+		Boolean Fly2B_Success;
+		StartCondition Command_Fly2A.outcome == SUCCESS;
+		PostCondition B_Complete;
+
+		Fly2B("Fly2B");
+		pprint("############################### Executing Fly2B ###############################");
+		
+		CheckSuccess: OnCommand "CommandReturn" (String header, String cmd, Boolean Fly2B_Success, Integer poop)
+		{			
+			if Fly2B_Success
+			{
+				pprint("Successfully arrived at B");
+				B_Complete = true; // Successfully flown to WP B
+			} // End if
+			else
+			{
+				pprint("Flight to B has FAILED");
+			} // End else
+			endif
+		} // End CheckSuccess
+
+	} // End Command_Fly2B
+
+} // End WaypointPlan

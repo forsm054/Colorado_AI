@@ -1,0 +1,360 @@
+/////////////////////////////////////////////////////////////////////////
+//
+//  README
+//
+//  Name: Fly2A_Simulator.ple
+//  By: Alec Forsman - Red Canyon Software
+//  Created: 12/29/15
+//  Updated: 1/11/15
+//
+//  Description:
+//		This is the simulator for the plan 'Fly2A.plx'. It emulates the
+//		commands being sent to and received from CoreFlight.
+//
+//	Updates:
+//		12/29/15
+//			- Recreated 
+//		1/5/16
+//			- Operational
+//		1/6/16
+//			- Added print statements
+//		1/8/16
+//			- Got rid of extraneous UpdateLookups by implementing SynchronousCommands
+//				in Fly2A.ple (this fixed update lookup problem)
+//			- Got rid of extraneous checks and added comments
+//			- Added logic to differentiate between A/B - added corresponding comments
+//			- Got simulator to shutdown properly by adding exit condition instead of end condition
+//		1/11/16
+//			- Added UpdateStart so that the start location of the aircraft is updated here. Then
+//				Waypoint_Plan.ple doesn't have same variables to update
+//			- Added UpdateWaypointLocation so that the WP locations are set here for similar 
+//				reasons as above
+//			- Added Pre and Post conditions where applicable. Can be used later for error checks
+//
+//	Issues/ToDo:
+//			- elseif's don't work....
+//			- Could constrain with start, end, and skip conditions instead of if/elseif
+//			- Set up to run and communicate with BBB
+//			- clean up
+//			- Need update logic to be more robust. (May need CoreFlight to do this)
+//
+/////////////////////////////////////////////////////////////////////////
+
+Command CommandReturn(String, Boolean);
+// Simulator Commands
+Command pprint (...);
+Command UpdateLookup (...);
+Command SendReturnValue (...);
+
+Fly2WP_Simulator: Concurrence
+{
+	Boolean PlanComplete = false;
+	ExitCondition ShutdownSimulator.outcome == SUCCESS || PlanComplete;
+	
+	pprint("##################### Firing up the simulator #############################");
+	
+	// Updates the Initial Conditions of the A/C
+	UpdateInitialConditions: OnCommand "UpdateIC" (String cmd, Real velStart, Real xStart, Real yStart, Real zStart)
+	{
+		Boolean IC_Updated;
+		PostCondition IC_Updated;
+		
+		pprint("Processing", cmd); // debug
+		
+		pprint("Start location and velocity received");
+		CommandReturn("CommandReturn", true);
+		IC_Updated = true;
+		
+	} // End UpdateInitialConditions
+	
+	// Update the location of the next WP to fly to
+	ExecuteUpdateWP:
+	{
+		RepeatCondition !PlanComplete;
+		PostCondition UpdateWaypointLocation.outcome == SUCCESS;
+		
+		pprint("ExecuteUpdateWP");
+	
+		UpdateWaypointLocation: OnCommand "UpdateWaypoint" (String cmd, Real xWaypoint, Real yWaypoint, Real zWaypoint, String WP)
+		{
+			Boolean WaypointUpdated;
+			PostCondition WaypointUpdated;
+			
+			pprint("Processing", cmd); //debug
+			
+			// Could change to nodes to execute better
+			if WP == "A"
+			{
+				pprint(" ");
+				pprint("Waypoint", WP, "received and updated");
+				WaypointUpdated = true;
+			} // End if
+			else
+			{
+				pprint(" ");
+				pprint("Waypoint", WP, "received and updated");
+				WaypointUpdated = true;
+			} // End else
+			endif
+		} // End UpdateWaypointLocation
+	} // End ExecuteUpdateWP
+
+	// Emulates the science that would be exectued when waypoint has been reached
+	ExecuteTakePic: // Extra node needed in case of failure
+	{
+		RepeatCondition !PlanComplete;
+		PostCondition TakePic.outcome == SUCCESS;
+		
+		TakePic: OnCommand "TakePic" (String WP) // Command 1
+		{	
+			Boolean PicTaken;
+			PostCondition PicTaken;
+			
+			// Acknowledges that command was received
+			pprint(" ");
+			pprint("COMMAND 1: TakePic()");
+			pprint("TakePic command registered");
+			
+			// Depending on which Waypoint we are at, perform different science
+			if WP == "A"
+			{
+				pprint("Performing Science at A");
+				PicTaken = true;
+			} // End if
+			else
+			{
+				pprint("Performing Science at B");
+				PicTaken = false;
+			}
+			endif
+		} // end TakePic
+		
+	} // End ExecuteTakePic
+	
+	// Updates parameters similar to what would be received from CoreFlight
+	ExecuteGetParams: // Extra node needed in case of failure
+	{
+		RepeatCondition !PlanComplete;
+		PostCondition GetParams.outcome == SUCCESS;
+		
+		GetParams:  OnCommand "GetParams" (Real velocity, Real xLocation, Real yLocation, Real zLocation, String WP)// Command 3
+		{
+			Boolean ParamsUpdated;
+			PreCondition isKnown(velocity) && isKnown(xLocation) && isKnown(yLocation) && isKnown(zLocation); // makes sure parameters were received properly
+			PostCondition ParamsUpdated;
+		
+			// Acknowledges that command was received
+			pprint(" ");
+			pprint("COMMAND 3: GetParams()");
+			pprint("Entering GetParams");
+			
+			// Simulates what CoreFlight would do. Basically just updates parameters in predictible manner
+			// depending on which waypoint A/C is traveling to
+			if WP == "A"
+			{
+				UpdateLookup("vel", velocity);
+				UpdateLookup("xLoc", xLocation + velocity);
+				UpdateLookup("yLoc", yLocation);
+				UpdateLookup("zLoc", zLocation);
+				UpdateLookup("xTarget", xLocation + velocity); // should change this later to something more robust
+				ParamsUpdated = true;
+			} // End if 
+			else
+			{
+				UpdateLookup("vel", velocity);
+				UpdateLookup("xLoc", xLocation);
+				UpdateLookup("yLoc", yLocation + velocity);
+				UpdateLookup("zLoc", zLocation);
+				UpdateLookup("yTarget", yLocation + velocity); // should change this later to something more robust
+				ParamsUpdated = true;	
+			} // End else
+			endif
+			
+			pprint("Parameters received");
+			
+		} // End GetParams
+	
+	} // End ExecuteGetParams
+	
+	// Check updated flight parameters to make sure they are what is expected
+	ExecuteUpdateFlight: // Extra node needed in case of failure
+	{
+		RepeatCondition !PlanComplete;
+		PostCondition UpdateFlight.outcome == SUCCESS;
+		
+		UpdateFlight: OnCommand "UpdateFlight" (Integer velFlag, Integer xFlag, Integer yFlag, Integer zFlag, String WP) // Command 4
+		{
+			PostCondition velUpdate.outcome == SUCCESS && LocationUpdate.outcome == SUCCESS;
+			
+			// Acknowledges that command was received
+			pprint(" ");
+			pprint("COMMAND 4: UpdateFlight()");
+			pprint("Entering UpdateFlight");
+			
+			velUpdate: // Check velocity
+			{
+			
+				if velFlag == 1
+				{
+					UpdateLookup("vel", Lookup(vel)+1); // make sure it can lookup in simulator, otherwise pass vel
+					pprint("Increasing velocity");
+				} // end if
+				elseif velFlag == -1
+				{
+					UpdateLookup("vel", Lookup(vel)-1);
+					pprint("Decreasing velocity");
+				} // end elseif
+				else
+				{
+					// Do nothing
+					pprint("Maintaining velocity");
+				} // end else
+				endif
+				
+			} // End velUpdate
+			
+			LocationUpdate: // Check location parameters
+			{
+				PostCondition xUpdate.outcome == SUCCESS && yUpdate.outcome == SUCCESS && zUpdate.outcome == SUCCESS;
+			
+				xUpdate: // Check x Location
+				{
+					PostCondition isKnown(xFlag);
+				
+					if xFlag == 1
+					{
+						UpdateLookup("xLoc", Lookup(xLoc)+1);
+						pprint("Increasing x coordinate");
+					} // end if
+					elseif xFlag == -1
+					{
+						UpdateLookup("xLoc", Lookup(xLoc)-1);
+						pprint("Decreasing x coordinate");
+					} // end elseif
+					else
+					{
+						//UpdateLookup("xLoc", Lookup(xLoc)+1); // still need to update x because its flying horizontal
+						//UpdateLookup("xTarget", Lookup(xTarget)+1);
+						
+						// Do nothing
+						pprint("Maintaining x coordinate");
+					} // end else
+					endif
+				
+				} // end xUpdate
+			
+				yUpdate: // Check y Location
+				{
+					PostCondition isKnown(yFlag);
+				
+					if yFlag == 1
+					{
+						UpdateLookup("yLoc", Lookup(yLoc)+1);
+						pprint("Increasing y coordinate");
+					} // end if
+					elseif yFlag == -1
+					{
+						UpdateLookup("yLoc", Lookup(yLoc)-1);
+						pprint("Decreasing y coordinate");
+					} // end elseif
+					else
+					{
+						// Do nothing
+						pprint("Maintaining y coordinate");
+					} // end else
+					endif
+				
+				} // end yUpdate
+			
+				zUpdate: // Check z Location
+				{
+					PostCondition isKnown(zFlag);
+				
+					if zFlag == 1
+					{
+						UpdateLookup("zLoc", Lookup(zLoc)+1);
+						pprint("Increasing z coordinate");
+					} // end if
+					elseif zFlag == -1
+					{
+						UpdateLookup("zLoc", Lookup(zLoc)-1);
+						pprint("Decreasing z coordinate");
+					} // end elseif
+					else
+					{
+						// Do nothing
+						pprint("Maintaing z coordinate");
+					} // end else
+					endif
+				
+				} // end zUpdate
+				
+			} // end LocationUpdate
+		
+		} // End UpdateFlight
+	
+	} // End ExecuteUpdateFlight
+	
+	// Simulates the activation of the science equipment needed when close to waypoint location
+	ExecuteActivateScience: // Extra node needed in case of failure
+	{
+		RepeatCondition !PlanComplete;
+		PostCondition ActivateScience.outcome == SUCCESS;
+		
+		ActivateScience: OnCommand "ActivateScience" (String WP) // Command 5
+		{
+			Boolean ScienceActivated;
+			PostCondition ScienceActivated;
+			
+			// Acknowledges that command has been received
+			pprint(" ");
+			pprint("COMMAND 2: ActivateScience()");
+			
+			if WP == "A"
+			{
+				pprint("Activating Science for Waypoint A");
+				ScienceActivated = true;
+			} // End if
+			else
+			{
+				pprint("Activating Science for Waypoint B");
+				ScienceActivated = true;
+			} // End else
+			endif
+		
+		} // End ActivateScience
+		
+	} // End ExecuteActivateScience
+	
+	// Simulates the update of the plan when that part of plan has been completed
+	ExecuteUpdatePlan: // Extra node needed in case of failure
+	{
+		RepeatCondition !PlanComplete;
+		PostCondition UpdatePlan.outcome == SUCCESS;
+		
+		UpdatePlan: OnCommand "UpdatePlan" (String WP) // Command 2	
+		{
+			Boolean PlanUpdated;
+			PostCondition PlanUpdated;
+			
+			// Acknowledges that command has been received
+			pprint(" ");
+			pprint("COMMAND 5: UpdatePlan()");
+			pprint("Executing UpdatePlan");
+			PlanUpdated = true;
+		
+		} // End UpdatePlan
+		
+	} // End ExecuteUpdatePlan
+	
+	// Shutdowns the simulator properly
+	ShutdownSimulator: OnCommand "PlanComplete"
+	{
+		PostCondition PlanComplete;
+		
+		pprint(" ");
+		pprint("Shutting Down Simulator");
+		PlanComplete = true;
+	} // End ShutdownSimulator
+
+} // End Fly2WP_Simulator

@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4253/branches/plexil-4/src/interfaces/Sockets
+END
+ServerSocket.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/ServerSocket.h
+END
+ClientSocket.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/ClientSocket.cpp
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/Makefile.am
+END
+Socket.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/Socket.cpp
+END
+ClientSocket.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/ClientSocket.h
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/README
+END
+SocketException.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/SocketException.h
+END
+Socket.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/Socket.h
+END
+ServerSocket.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/Sockets/ServerSocket.cpp
+END

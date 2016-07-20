@@ -1,0 +1,147 @@
+/////////////////////////////////////////////////////////////////////////
+//
+//  README
+//
+//  Name: MonitorAlt_App.c
+//  By: Alec Forsman - Red Canyon Software
+//  Created: 5/12/16
+//  Updated: 5/12/16
+//
+//  Description:
+//		This is a Core Flight Application intended to model the MonitorAlt commands in the PLEXIL
+//	  Waypoint plan. The app simply creates a pipe to receive messages, and when
+//		a message is received it will perform the corresponding neccessary functions and send data
+//		back so PLEXIL can continue to update the flight. This can be used in the future as the
+//		layout for communication between PLEXIL and CFE.
+//
+//	Updates:
+//		5/12/16
+//			- Created
+//			- Created SB pipe to receive commands from TestUdp_app.c
+//		5/13/16
+//			- Improved naming conventions
+//
+//	Issues/ToDo:
+//		- Interface with PLEXIL
+//		- Setup to perform neccessary calculations
+//		- Send data back to TestUdp_app.c
+//		- Get app to receive real data
+//		- Combine Command Pack structure and Command structure. Shouldn't need both
+//		- clean up
+//		- Implement error checks
+//		- NOTE: If app doesn't run, 90% of the time its an issue with the code(will still happen if it compiles)
+//
+/////////////////////////////////////////////////////////////////////////
+
+
+#include "MonitorAlt_App.h"
+#include "MonitorAlt_Events.h"
+#include "MonitorAlt_Msgids.h"
+
+MonitorAlt_AppData_t	MonitorAlt_AppData;
+
+static CFE_EVS_BinFilter_t MonitorAlt_EventFilters[] = 
+	{
+		{DEBUG,										0x0000},
+	};		
+		
+
+// Main Function
+void MonitorAlt_AppMain(void)
+{
+	uint32 Status;
+
+	CFE_ES_RegisterApp(); // Register app w/ CFE
+	MonitorAlt_init(); // initialize the app. Sets up needed params (Success returns CFE_SUCCESS)
+	
+	// MonitorAlt Run Loop
+	while(CFE_ES_RunLoop(&MonitorAlt_AppData.RunStatus) == TRUE)
+	{
+		
+		Status = CFE_SB_RcvMsg(&MonitorAlt_AppData.MsgPtr, MonitorAlt_AppData.MonitorAltPipe, CFE_SB_PEND_FOREVER);
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"MONITORALT MESSAGE RECEIVED!!!"); //debug
+
+		if (Status == CFE_SUCCESS);
+		{
+			
+			if(CFE_SB_GetMsgId(MonitorAlt_AppData.MsgPtr) == MONITORALT_MID)
+			{
+				
+				CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"Message ID matches."); //debug
+				
+				AdjustAlt();
+				
+				CFE_SB_InitMsg(&MonitorAlt_AppData.DataPacket, MONITORALT_RETURN_MID, sizeof(MonitorAlt_State_t), FALSE);
+				
+				//CFE_ES_ExitApp(UpdFlight_AppData.RunStatus);
+				//CFE_SB_SendMsg((CFE_SB_Msg_t *) &MonitorAlt_AppData.DataPacket);
+			}
+		}
+		
+	} // End while
+	
+} // End MonitorAlt_AppMain
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void MonitorAlt_init(void)
+{
+	int status;
+	
+	CFE_EVS_Register(MonitorAlt_EventFilters, sizeof(MonitorAlt_EventFilters)/sizeof(CFE_EVS_BinFilter_t), CFE_EVS_BINARY_FILTER); // Register Event filter table so events can be output
+	
+	MonitorAlt_AppData.RunStatus = CFE_ES_APP_RUN;
+	
+	MonitorAlt_AppData.PipeDepth = MONITORALT_PIPE_DEPTH;
+	strcpy(MonitorAlt_AppData.PipeName, "MONITORALT_PIPE");	
+	
+	// Create Receive (command) pipe
+	status = CFE_SB_CreatePipe(&MonitorAlt_AppData.MonitorAltPipe, MonitorAlt_AppData.PipeDepth, MonitorAlt_AppData.PipeName);
+	if(status != CFE_SUCCESS)
+	{
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_ERROR,"Failed to create MonitorAlt pipe");
+	}
+	
+	// Subscribe
+	status = CFE_SB_Subscribe(MONITORALT_MID, MonitorAlt_AppData.MonitorAltPipe);
+	if(status != CFE_SUCCESS)
+	{
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_ERROR,"Failed to subscribe to MONITORALT pipe");
+	}
+	
+	CFE_SB_InitMsg(&MonitorAlt_AppData.DataPacket, MONITORALT_RETURN_MID, sizeof(MonitorAlt_State_t), TRUE);
+	
+	
+	CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"MonitorAlt App Initialized");
+	
+	
+} // End MonitorAlt_init
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void AdjustAlt(void)
+{
+	float CurrentAlt, DesiredAlt, AltAdjust;
+	MonitorAlt_State_t *TblPtr;
+	
+	CFE_TBL_Share(&MonitorAlt_AppData.TblHandle,"CMDHANDLER_APP.InitTable");
+		
+	CFE_TBL_GetAddress((void *)&TblPtr, MonitorAlt_AppData.TblHandle);
+	
+	CurrentAlt = TblPtr->zLoc;
+	DesiredAlt = TblPtr->zWaypoint_A;
+	
+	AltAdjust = (DesiredAlt - CurrentAlt)/(TblPtr->xWaypoint_A - TblPtr->xLoc);
+	TblPtr->zLoc = TblPtr->zLoc + AltAdjust;
+	printf("Current Altitude = %f, Desired Altitude = %f, Updated Altitude = %f \n", CurrentAlt, DesiredAlt, TblPtr->zLoc);
+	
+	CFE_TBL_ReleaseAddress(MonitorAlt_AppData.TblHandle);
+
+
+
+}
+
+

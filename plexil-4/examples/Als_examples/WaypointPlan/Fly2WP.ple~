@@ -1,0 +1,704 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//
+//  README
+//
+//  Name: Fly2A.ple
+//  By: Alec Forsman - Red Canyon Software
+//  Created: 12/29/15
+//  Updated: 1/11/16
+//
+//  Description:
+//		This is the plan for the 'Flying to A' senario for a simulation of 
+//		an aircraft flying to specified waypoints and performing science 
+//		operations. This is currently only set up to run with the simulator
+//		'Fly2A_Simulator.plx'. Also set up so that A is a straight line from origin.
+//
+//	Updates:
+//		12/29/15
+//			- Recreated 
+//			- Laid out general framework
+//		1/5/16
+//			- Got to run and updated config files
+//		1/6/16
+//			- Fixed the stop at arriving to A by adding skip conditions
+//			- Fixed print statement order by adding start conditions to each node
+//			- Got At_A to execute by removing precondition
+//			- preliminary error checks added to repeat command if simulator doesn't
+//				update lookup. NOTE: simulator may not be updating fast enought, but
+//				this shouldn't be a problem when using UDP packets...or maybe it will.
+//		1/8/16
+//			- Fixed timing errors by adding SynchronousCommand (Still need to fix GetParams)
+//			- Got rid of extraneous boolean lookups by adding SynchronousCommand
+//			- Added CheckLocation to ExecuteGetParams to update flight status
+//			- Got GetParams to print correct updated location by adding SynCom
+//			- Got SynCom to take variables by defining the variables outside of the node
+//		1/9/16
+//			- Added OnCommand "Fly2A" so it runs when called by Waypoint_Plan.ple
+//			- Updated conf file to work with Waypoint_Plan and Simulator and both A/B logic
+//			- Added Fly2B
+//			- Added A/B logic to commands so simulators can be combined
+//			- Added logic so waypoints are set in Waypoint_Plan.ple
+//		1/11/16
+//			- Start location now passed from Waypoint_Plan.ple
+//			- Update pprints to look better
+//			- Changed all set Waypoint variables to lookups and plan executed better. This
+//				made it so waypoint location variables updated everytime. (timing issue)
+//			- Put all commands in a node (except for pprint statements)
+//			- Added Pre and Post conditions where applicable
+//
+//	Issues/ToDo:
+//		- Set up to run and communicate with BBB
+//		- clean up
+//		- put if/elseif statements in a node instead with start, end, and skip conditions
+//		- Should be able to have Not_at_A exit condition to trigger at A, but doesn't work
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
+// Lookup variables
+Real Lookup vel;
+Real Lookup xLoc;
+Real Lookup yLoc;
+Real Lookup zLoc;
+Integer Lookup xTarget;
+Integer Lookup yTarget;
+Real Lookup xWaypoint_A;
+Real Lookup yWaypoint_A;
+Real Lookup zWaypoint_A;
+Real Lookup xWaypoint_B;
+Real Lookup yWaypoint_B;
+Real Lookup zWaypoint_B;
+// Commands emulating those sent to CoreFlight
+Boolean Command TakePic(String); // Command 1
+Boolean Command UpdatePlan(String); // Command 2
+Boolean Command GetParams(Real w, Real x, Real y, Real z, String); // Command 3
+Boolean Command UpdateFlight(Integer, Integer, Integer, Integer, String); // Command 4
+Boolean Command ActivateScience(String); // Command 5
+// Commands used to communicate with simulator
+Command SendMessage (...);
+Command PlanComplete();
+Command SendReturnValue (...);
+// Standard plexil commands
+Command pprint (...);
+
+Waypoints:
+{
+	Boolean WaypointPlan_Success = false;
+	ExitCondition WaypointPlan_Success;
+	
+	pprint("######################## Initializing Plan ###############################");
+
+	Fly2A: OnCommand "Fly2A"
+	{
+		Boolean At_A = false;
+	
+		pprint("################## Starting flight to Waypoint A #########################");
+		pprint("Waypoint A is at x =",Lookup(xWaypoint_A),"y =",Lookup(yWaypoint_A),"z =",Lookup(zWaypoint_A));
+	
+		Not_at_A:
+		{
+			StartCondition !At_A;
+			RepeatCondition !At_A;
+			PreCondition isKnown(At_A);
+			PostCondition At_A;
+		
+			pprint("#########################################################################");
+			pprint("Currently at x =",Lookup(xLoc),"y =",Lookup(yLoc),"z =",Lookup(zLoc));
+		
+			ExecuteGetParams:
+			{
+				Real velocity;
+				Real xLocation;
+				Real yLocation;
+				Real zLocation;			
+				// Lookups assigned to variables because I'm not sure how to pass lookups using synchronous command
+				// This is a non issued when not using the simulator.
+				velocity = Lookup(vel);
+				xLocation = Lookup(xLoc);
+				yLocation = Lookup(yLoc);
+				zLocation = Lookup(zLoc);
+	
+				GetParams:
+				{
+					Boolean GetParamsSuccess;
+					PostCondition GetParamsSuccess;
+			
+					pprint(" ");
+					pprint("Entering GetParams");
+				
+					Command_GetParams:
+					{
+						SynchronousCommand GetParamsSuccess = GetParams(velocity, xLocation, yLocation, zLocation, "A");
+					} // End Command_GetParams
+								
+					if GetParamsSuccess
+					{
+						pprint("Parameters successfully obtained");
+						pprint("Parameters received: vel =",Lookup(vel),"x =",Lookup(xLoc),"y =",Lookup(yLoc),"z =",Lookup(zLoc));
+					} // end if
+					else
+					{
+						pprint("Obtaining parameters FAILED!!!");
+					} // end else
+					endif
+							
+				} // End GetParams
+			
+				CheckLocation: Concurrence
+				{
+					PostCondition EnRoute_to_A.outcome == SUCCESS || Arriving_at_A.outcome == SUCCESS || Arrived_at_A.outcome == SUCCESS;
+								
+					EnRoute_to_A:
+					{
+						StartCondition (Lookup(xWaypoint_A) - Lookup(xLoc)) > 1 || (Lookup(yWaypoint_A) - Lookup(yLoc)) > 1 || (Lookup(zWaypoint_A) - Lookup(zLoc)) > 1;
+						SkipCondition (Lookup(xWaypoint_A) - Lookup(xLoc)) <= 1 && (Lookup(yWaypoint_A) - Lookup(yLoc)) <= 1 && (Lookup(zWaypoint_A) - Lookup(zLoc)) <= 1;
+				
+						pprint("Updated Flight Status: Maintaing Route to A");
+				
+					} // end EnRoute_to_A
+			
+					Arriving_at_A:
+					{
+						Boolean ScienceActivated;
+						StartCondition (Lookup(xWaypoint_A) - Lookup(xLoc)) <= 1 && (Lookup(yWaypoint_A) - Lookup(yLoc)) <= 1 && (Lookup(zWaypoint_A) - Lookup(zLoc)) <= 1;
+						SkipCondition (Lookup(xWaypoint_A) - Lookup(xLoc)) > 1 || (Lookup(yWaypoint_A) - Lookup(yLoc)) > 1 || (Lookup(zWaypoint_A) - Lookup(zLoc)) > 1 || ((Lookup(xWaypoint_A) - Lookup(xLoc)) == 0 && (Lookup(yWaypoint_A) - Lookup(yLoc)) == 0 && (Lookup(zWaypoint_A) - Lookup(zLoc)) == 0);
+						PostCondition ScienceActivated;
+	
+						pprint("Updated Flight Status: Arriving at A");
+						pprint("Activating science to perform at Waypoint A");
+						
+						Command_ActivateScience:
+						{
+							SynchronousCommand ScienceActivated = ActivateScience("A");
+						} // End Command_ActivateScience
+	
+						if ScienceActivated
+						{
+							pprint("Science successfully activated");
+						} // end if
+						else
+						{
+							pprint("Science activation FAILED!!!");
+						} // end else
+						endif
+
+					} // end Arriving_at_A
+						
+					Arrived_at_A:
+					{
+						StartCondition Lookup(xLoc) == Lookup(xWaypoint_A) && Lookup(yLoc) == Lookup(yWaypoint_A) && Lookup(zLoc) == Lookup(zWaypoint_A);
+						SkipCondition Lookup(xLoc) != Lookup(xWaypoint_A) || Lookup(yLoc) != Lookup(yWaypoint_A) || Lookup(zLoc) != Lookup(zWaypoint_A);
+						EndCondition At_A;
+						PostCondition isKnown(At_A);
+			
+						At_A = true;
+			
+					} // end Arrived_at_A
+		
+				} // end CheckLocation
+			
+			} // end ExecuteGetParams
+		
+			MonitorParams:
+			{
+				// Expected parameter values
+				//Real xTarget = 0; // needs to be updated
+				//Real yTarget = 0;
+				Real zTarget = 5;
+				Real velTarget = 1;
+				// Actual parameter values
+				Real velState;
+				Real xState;
+				Real yState;
+				Real zState;
+				// Update parameter logic
+				Integer velFlag;
+				Integer xFlag;
+				Integer yFlag;
+				Integer zFlag;
+				SkipCondition At_A;
+			
+				pprint(" ");
+				pprint("Entering MonitorParams");
+		
+				Velocity:
+				{
+					PreCondition isKnown(velTarget);
+					PostCondition isKnown(velFlag);
+				
+					pprint("Determining velocity update");
+				
+					velState = Lookup(vel) - velTarget; // add tolerance logic
+				
+					if velState < 0
+					{
+						velFlag = 1; // Increase velocity
+					} // End if
+					elseif velState > 0
+					{
+						velFlag = -1; // Decrease velocity
+					} // end elseif
+					else
+					{
+						velFlag = 0; // Maintain velocity
+					} // end else
+					endif
+			
+				} // End Velocity
+			
+				Location:
+				{
+					StartCondition Velocity.state == FINISHED;
+					PreCondition isKnown(Lookup(xTarget)) && isKnown(Lookup(yTarget)) && isKnown(zTarget);
+					PostCondition isKnown(xFlag) && isKnown(yFlag) && isKnown(zFlag);
+				
+					xState = Lookup(xLoc) - Lookup(xTarget); // add tolerance logic
+					yState = Lookup(yLoc) - Lookup(yTarget); // add tolerance logic
+					zState = Lookup(zLoc) - zTarget; // add tolerance logic
+				
+					xLocation:
+					{
+				
+						pprint("Determining x coordinate update");
+				
+						if xState < 0
+						{
+							xFlag = 1; // Increase xLoc
+						} // end if
+						elseif xState > 0
+						{
+							xFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							xFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end xLocation
+	
+					yLocation:
+					{
+						StartCondition xLocation.state == FINISHED;
+				
+						pprint("Determining y coordinate update");
+				
+						if yState < 0
+						{
+							yFlag = 1; // Increase xLoc
+						} // end if
+						elseif yState > 0
+						{
+							yFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							yFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end yLocation
+
+					zLocation:
+					{
+						StartCondition yLocation.state == FINISHED;
+				
+						pprint("Determining z coordinate update");
+				
+						if zState < 0
+						{
+							zFlag = 1; // Increase xLoc
+						} // end if
+						elseif zState > 0
+						{
+							zFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							zFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end zLocation
+				
+					pprint("Updating Flight Parameters: velFlag =",velFlag,"xFlag =",xFlag,"yFlag =",yFlag,"zFlag =",zFlag);
+					UpdateFlight(velFlag, xFlag, yFlag, zFlag, "A");
+		
+				} // End Location
+		
+			} // End MonitorParams
+	
+		} // End Not_at_A
+	
+		Arrived_at_A:
+		{
+			StartCondition At_A;
+			PreCondition Not_at_A.state == FINISHED;
+		
+			pprint("Updated Flight Status: Arrived at A!");
+		
+			PerformScience:
+			{
+				Boolean PicTaken;			
+				PostCondition PicTaken; // Science Successful
+			
+				pprint(" ");
+				pprint("Performing Science at Waypoint A");
+			
+				Command_TakePic:
+				{
+					SynchronousCommand PicTaken = TakePic("A");	
+				} // End Command_TakePic
+						
+				if PicTaken
+				{
+					pprint("Science successful");
+				} // end if
+				else
+				{
+					pprint("Science FAILED!!!");
+				} // end else
+				endif
+		
+			} // End Perform Science
+		
+			UpdatePlan:
+			{
+				Boolean PlanUpdated;		
+				PostCondition PlanUpdated;
+			
+				pprint(" ");
+				pprint("Updating Waypoint Plan");
+			
+				Command_UpdatePlan:
+				{
+					SynchronousCommand PlanUpdated = UpdatePlan("A");
+				} // End Command_UpdatePlan
+				
+				if PlanUpdated
+				{
+					pprint("Plan updated successfully");
+					pprint(" ");
+					//PlanComplete();
+				} // end if
+				else
+				{
+					pprint("Plan update FAILED!!!");
+					pprint(" ");
+				} // end else
+				endif
+		
+			} // End UpdatePlan
+	
+		} // End Arrived_at_A
+
+	} // End Fly2A
+
+	Fly2B: OnCommand "Fly2B"
+	{
+		Boolean At_B = false;
+	
+		pprint("#########################################################################");
+		pprint("#########################################################################");
+		pprint("#########################################################################");
+		pprint("#########################################################################");
+		pprint("#########################################################################");
+		
+		pprint(" ");
+		pprint("##################### Starting flight to Waypoint B #####################");
+		pprint("Waypoint B is at x =",Lookup(xWaypoint_B),"y =",Lookup(yWaypoint_B),"z =",Lookup(zWaypoint_B)); 
+	
+		Not_at_B:
+		{
+			StartCondition !At_B;
+			RepeatCondition !At_B;
+			PreCondition isKnown(At_B);
+		
+			pprint("#########################################################################");
+			pprint("Currently at x =",Lookup(xLoc),"y =",Lookup(yLoc),"z =",Lookup(zLoc));
+		
+			ExecuteGetParams:
+			{
+				Real velocity;
+				Real xLocation;
+				Real yLocation;
+				Real zLocation;			
+				// Lookups assigned to variables because I'm not sure how to pass lookups using synchronous command
+				// This is a non issued when not using the simulator.
+				velocity = Lookup(vel);
+				xLocation = Lookup(xLoc);
+				yLocation = Lookup(yLoc);
+				zLocation = Lookup(zLoc);
+	
+				GetParams:
+				{
+					Boolean GetParamsSuccess;
+					PostCondition GetParamsSuccess;
+			
+					pprint(" ");
+					pprint("Entering GetParams");
+				
+					Command_GetParams:
+					{
+						SynchronousCommand GetParamsSuccess = GetParams(velocity, xLocation, yLocation, zLocation, "B");
+					} // End Command_GetParams
+								
+					if GetParamsSuccess
+					{
+						pprint("Parameters successfully obtained");
+						pprint("Parameters received: vel =",Lookup(vel),"x =",Lookup(xLoc),"y =",Lookup(yLoc),"z =",Lookup(zLoc));
+					} // end if
+					else
+					{
+						pprint("Obtaining parameters FAILED!!!");
+					} // end else
+					endif
+							
+				} // End GetParams
+			
+				CheckLocation: Concurrence
+				{
+					PostCondition EnRoute_to_B.outcome == SUCCESS || Arriving_at_B.outcome == SUCCESS || Arrived_at_B.outcome == SUCCESS;
+								
+					EnRoute_to_B:
+					{
+						StartCondition (Lookup(xWaypoint_B) - Lookup(xLoc)) > 1 || (Lookup(yWaypoint_B) - Lookup(yLoc)) > 1 || (Lookup(zWaypoint_B) - Lookup(zLoc)) > 1;
+						SkipCondition (Lookup(xWaypoint_B) - Lookup(xLoc)) <= 1 && (Lookup(yWaypoint_B) - Lookup(yLoc)) <= 1 && (Lookup(zWaypoint_B) - Lookup(zLoc)) <= 1;
+				
+						pprint("Updated Flight Status: Maintaing Route to B");
+				
+					} // end EnRoute_to_B
+			
+					Arriving_at_B:
+					{
+						Boolean ScienceActivated;
+						StartCondition (Lookup(xWaypoint_B) - Lookup(xLoc)) <= 1 && (Lookup(yWaypoint_B) - Lookup(yLoc)) <= 1 && (Lookup(zWaypoint_B) - Lookup(zLoc)) <= 1;
+						SkipCondition (Lookup(xWaypoint_B) - Lookup(xLoc)) > 1 || (Lookup(yWaypoint_B) - Lookup(yLoc)) > 1 || (Lookup(zWaypoint_B) - Lookup(zLoc)) > 1 || ((Lookup(xWaypoint_B) - Lookup(xLoc)) == 0 && (Lookup(yWaypoint_B) - Lookup(yLoc)) == 0 && (Lookup(zWaypoint_B) - Lookup(zLoc)) == 0);
+						PostCondition ScienceActivated;
+	
+						pprint("Updated Flight Status: Arriving at B");
+						pprint("Activating science to perform at Waypoint B");
+						
+						Command_ActivateScience:
+						{
+							SynchronousCommand ScienceActivated = ActivateScience("B");
+						} // End Command_ActivateScience
+	
+						if ScienceActivated
+						{
+							pprint("Science successfully activated");
+						} // end if
+						else
+						{
+							pprint("Science activation FAILED!!!");
+						} // end else
+						endif
+
+					} // end Arriving_at_B
+						
+					Arrived_at_B:
+					{
+						StartCondition Lookup(xLoc) == Lookup(xWaypoint_B) && Lookup(yLoc) == Lookup(yWaypoint_B) && Lookup(zLoc) == Lookup(zWaypoint_B);
+						SkipCondition Lookup(xLoc) != Lookup(xWaypoint_B) || Lookup(yLoc) != Lookup(yWaypoint_B) || Lookup(zLoc) != Lookup(zWaypoint_B);
+						EndCondition At_B;
+						PostCondition isKnown(At_B);
+			
+						At_B = true;
+			
+					} // end Arrived_at_B
+		
+				} // end CheckLocation
+			
+			} // end ExecuteGetParams
+		
+			MonitorParams:
+			{
+				// Expected parameter values
+				// Real xTarget = 10; 
+				// Real yTarget = 0; // needs to be updated
+				Real zTarget = 5;
+				Real velTarget = 1;
+				// Actual parameter values
+				Real velState;
+				Real xState;
+				Real yState;
+				Real zState;
+				// Update parameter values
+				Integer velFlag;
+				Integer xFlag;
+				Integer yFlag;
+				Integer zFlag;
+				SkipCondition At_B;
+			
+				pprint(" ");
+				pprint("Entering MonitorParams");
+		
+				Velocity:
+				{
+					PreCondition isKnown(velTarget);
+					PostCondition isKnown(velFlag);
+				
+					pprint("Determining velocity update");
+				
+					velState = Lookup(vel) - velTarget; // add tolerance logic
+				
+					if velState < 0
+					{
+						velFlag = 1; // Increase velocity
+					} // End if
+					elseif velState > 0
+					{
+						velFlag = -1; // Decrease velocity
+					} // end elseif
+					else
+					{
+						velFlag = 0; // Maintain velocity
+					} // end else
+					endif
+			
+				} // End Velocity
+			
+				Location:
+				{
+					StartCondition Velocity.state == FINISHED;
+					PreCondition isKnown(Lookup(xTarget)) && isKnown(Lookup(yTarget)) && isKnown(zTarget);
+					PostCondition isKnown(xFlag) && isKnown(yFlag) && isKnown(zFlag);
+				
+					xState = Lookup(xLoc) - Lookup(xTarget); // add tolerance logic
+					yState = Lookup(yLoc) - Lookup(yTarget); // add tolerance logic
+					zState = Lookup(zLoc) - zTarget; // add tolerance logic
+				
+					xLocation:
+					{
+				
+						pprint("Determining x coordinate update");
+				
+						if xState < 0
+						{
+							xFlag = 1; // Increase xLoc
+						} // end if
+						elseif xState > 0
+						{
+							xFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							xFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end xLocation
+	
+					yLocation:
+					{
+						StartCondition xLocation.state == FINISHED;
+				
+						pprint("Determining y coordinate update");
+				
+						if yState < 0
+						{
+							yFlag = 1; // Increase xLoc
+						} // end if
+						elseif yState > 0
+						{
+							yFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							yFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end yLocation
+
+					zLocation:
+					{
+						StartCondition yLocation.state == FINISHED;
+				
+						pprint("Determining z coordinate update");
+				
+						if zState < 0
+						{
+							zFlag = 1; // Increase xLoc
+						} // end if
+						elseif zState > 0
+						{
+							zFlag = -1; // Decrease xLoc
+						} // end elseif
+						else
+						{
+							zFlag = 0; // Maintain xLoc
+						} // end else
+						endif
+					} // end zLocation
+				
+					pprint("Updating Flight Parameters: velFlag =",velFlag,"xFlag =",xFlag,"yFlag =",yFlag,"zFlag =",zFlag);
+					UpdateFlight(velFlag, xFlag, yFlag, zFlag, "B");
+		
+				} // End Location
+		
+			} // End MonitorParams
+	
+		} // End Not_at_B
+	
+		Arrived_at_B:
+		{
+			StartCondition At_B;
+			//PreCondition Not_at_B.state == FINISHED; // This doesn't work, could change to outcome -> success
+		
+			pprint("Updated Flight Status: Arrived at B!");
+		
+			PerformScience:
+			{
+				Boolean PicTaken;			
+				PostCondition PicTaken; // Science Successful
+			
+				pprint(" ");
+				pprint("Performing Science at Waypoint B");
+			
+				Command_TakePic:
+				{
+					SynchronousCommand PicTaken = TakePic("B");	
+				} // End Command_TakePic
+						
+				if PicTaken
+				{
+					pprint("Science successful");
+				} // end if
+				else
+				{
+					pprint("Science FAILED!!!");
+				} // end else
+				endif
+		
+			} // End Perform Science
+		
+			UpdatePlan:
+			{
+				Boolean PlanUpdated;		
+				PostCondition PlanUpdated;
+			
+				pprint(" ");
+				pprint("Updating Waypoint Plan");
+			
+				Command_UpdatePlan:
+				{
+					SynchronousCommand PlanUpdated = UpdatePlan("B");
+				} // End Command_UpdatePlan
+				
+				if PlanUpdated
+				{
+					pprint("Plan updated successfully");
+					pprint(" ");
+					PlanComplete();
+					SendReturnValue(true);
+					WaypointPlan_Success = true;
+				} // end if
+				else
+				{
+					pprint("Plan update FAILED!!!");
+					pprint(" ");
+				} // end else
+				endif
+		
+			} // End UpdatePlan
+	
+		} // End Arrived_at_B
+
+	} // End Fly2B
+
+} // End Waypoints

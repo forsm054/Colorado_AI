@@ -1,0 +1,15 @@
+K 10
+svn:ignore
+V 266
+atomic-assignment-script.plx.last
+command1-script.plx.last
+command2-script.plx.last
+command4-script.plx.last
+conjuncts-script.plx.last
+conjuncts1-script.plx.last
+repeat5-script.plx.last
+resource2-script.plx.last
+resource3-script.plx.last
+site-survey-script.plx.last
+
+END

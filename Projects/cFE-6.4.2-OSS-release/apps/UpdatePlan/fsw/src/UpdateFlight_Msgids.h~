@@ -1,0 +1,7 @@
+#ifndef _UpdateFlight_Msgids_h_
+#define _UpdateFlight_Msgids_h_
+
+
+#define UPDFLIGHT_MID         0x1888
+
+#endif

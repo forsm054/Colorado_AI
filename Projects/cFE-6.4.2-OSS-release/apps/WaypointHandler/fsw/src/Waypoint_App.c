@@ -1,0 +1,491 @@
+/////////////////////////////////////////////////////////////////////////
+//
+//  README
+//
+//  Name: Waypoint_App.c
+//  By: Alec Forsman - Red Canyon Software
+//  Created: 3/7/16
+//  Updated: 5/12/16
+//
+//  Description:
+//		This is a Core Flight Application intended to help get familiar with
+//		the syntax. The apply receives a UDP packet(command), and depending on the command, the
+//		The command handler sends a SB message so the corresponding app can perform the command.
+//	  This can be used in the future as the layout for communication between PLEXIL and CFE.
+//
+//	Updates:
+//		3/7/16
+//			- Created main function and header file
+//		3/11/16
+//			- Added Send Telemetry function
+//		3/12/16
+//			- Implemented the basic syntax, mainly the init app section, by following
+//				example in Developers Guide
+//			- Got to successfully compile and send a UDP packet to a socket
+//			- Started implementing receive pipe
+//		3/14/16
+//			- Implemented command pipe
+//			- Implemented logic to set up a response when command received
+//		3/15/16
+//			- Created Event Service table and registered it. (This got the app to work!)
+//		5/12/16
+//			- Successfully got app to receive UDP packets
+//			- Setup Command_Handler to handle GetParams command from PLEXIL
+//			- Successfully passed commands to SB bus and got it to receive in another app
+//			- Removed Telemetery function. Not needed.
+//		5/13/16
+//			- Improved naming conventions
+//			- Got all apps to be able to receive a SB message.
+//			- Got interface to PLEXIL working
+//		5/18/16
+//			- Created function to get initial conditions. Reading these from .txt caused app to crash. Going to try a Table.
+//			- created InitTable, which has the initial A/C state and waypoint locations.
+//		5/26/16
+//			- Able to get data throught SB msg but when extracting, the buffer is offset for some reason.
+//		5/30/16
+//			- fixed offset issue. Sender has data header in struct, but receiver shouldn't.
+//		6/26/16
+//			- Added plot logic
+//
+//	Issues/ToDo:
+//		- Setup Command_handler for other commands
+//		- Plot data for viualization
+//		- Housekeeping data?
+//		- Write function descriptions
+//		- clean up
+//		- Return handler should be separate app
+//		- Implement error checks
+//		- NOTE: If app doesn't run, 90% of the time its an issue with the code(will still happen if it compiles)
+//
+/////////////////////////////////////////////////////////////////////////
+
+#include "Waypoint_App.h"
+#include "Waypoint_Msg.h"
+#include "Waypoint_Perfids.h"
+#include "Waypoint_Events.h"
+#include "Waypoint_Msgids.h"
+
+// Global
+Waypoint_AppData_t	Waypoint_AppData; // App data structure
+CFE_TBL_Handle_t InitTable_Handle; // Does this need to be Global?
+int Recv_SocketID;
+bool SocketConnected;
+char pathFile[100];
+char * directory = "/home/al/Desktop";
+char * LogStateFile = "WP_State.txt";
+
+static CFE_EVS_BinFilter_t Waypoint_EventFilters[] = 
+	{
+		{CREATE_TLM_SOCK_ERR,				0x0000},	
+		{SEND_TLM_SOCK_ERR,					0x0000},
+		{CREATE_RECV_PIPE_ERR,			0x0000},
+		{CREATE_RECV_SOCK_ERR,			0x0000},
+		{RECV_MSG_ERR,							0x0000},
+		{BIND_RECV_SOCK_ERR,				0x0000},
+		{WAYPOINT_INITIALIZED_EID,	0x0000},
+		{TEST_OUT,									0x0000},
+		{DEBUG,											0x0000},
+	};		
+		
+
+// Main Function
+void Waypoint_AppMain(void)
+{
+	int Status;
+
+	CFE_ES_RegisterApp(); // Register app w/ CFE
+	Waypoint_init(); // initialize the app. Sets up needed params (Success returns CFE_SUCCESS)
+	
+	CFE_ES_PerfLogEntry(WAYPOINT_MAIN_TASK_PERF_ID);
+	
+	// Waypoint Run Loop
+	while(CFE_ES_RunLoop(&Waypoint_AppData.RunStatus) == TRUE)
+	{
+		sleep(1);
+
+		Status = CFE_SB_RcvMsg(&Waypoint_AppData.MsgPtr, Waypoint_AppData.ReturnPipe, CFE_SB_POLL);
+		if(Status == CFE_SUCCESS)
+		{
+			CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"Return Command Received");
+			Return_Handler(Waypoint_AppData.MsgPtr);
+		}
+		
+		if(SocketConnected)
+		{
+			CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION, "ProcessUDP");
+			ProcessUDP();
+			CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"End ProcessUDP, Run Status: %d", &Waypoint_AppData.RunStatus);	
+		}
+		
+	} // End while
+	
+} // End Waypoint_AppMain
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Waypoint_init(void)
+{
+	int status;
+	
+	status = CFE_EVS_Register(Waypoint_EventFilters, sizeof(Waypoint_EventFilters)/sizeof(CFE_EVS_BinFilter_t), CFE_EVS_BINARY_FILTER); // Register Event filter table so events can be output
+	
+	Waypoint_AppData.RunStatus = CFE_ES_APP_RUN;
+	
+	// Register Table
+	status = CFE_TBL_Register(&InitTable_Handle, "WP_InitTable", sizeof(WP_InitTable_t), CFE_TBL_OPT_DEFAULT, NULL);
+	if(status == CFE_SUCCESS)
+	{
+		status = CFE_TBL_Load(InitTable_Handle, CFE_TBL_SRC_FILE, "InitCond");
+		CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"Table Initialized"); //debug
+	}
+	else
+	{
+		CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"Error initializing table"); // debug
+	}
+	
+	// DataPacket Message
+	CFE_SB_InitMsg(&Waypoint_AppData.GetICPacket, WP_GETIC_MID, sizeof(WP_DataPacket_t), TRUE);
+	
+	// GetParams Message
+	CFE_SB_InitMsg(&Waypoint_AppData.GetParamsPacket, WP_GETPARAMS_MID, sizeof(WP_DataPacket_t), TRUE);
+	
+	// ActivateScience Message
+	CFE_SB_InitMsg(&Waypoint_AppData.ActSciPacket, WP_ACTSCI_MID, sizeof(WP_DataPacket_t), TRUE);
+	
+	// UpdateFlight Message
+	CFE_SB_InitMsg(&Waypoint_AppData.UpdFlightPacket, WP_UPDFLIGHT_MID, sizeof(WP_DataPacket_t), TRUE);
+	
+	// TakePic Message
+	CFE_SB_InitMsg(&Waypoint_AppData.TakePicPacket, WP_TAKEPIC_MID, sizeof(WP_DataPacket_t), TRUE);
+	
+	// UpdatePlan Message
+	CFE_SB_InitMsg(&Waypoint_AppData.UpdPlanPacket, WP_UPDPLAN_MID, sizeof(WP_DataPacket_t), TRUE);
+	
+	// Create Return Pipe
+	Waypoint_AppData.PipeDepth = WAYPOINT_PIPE_DEPTH;
+	strcpy(Waypoint_AppData.PipeName, "RETURN_PIPE");
+	status = CFE_SB_CreatePipe(&Waypoint_AppData.ReturnPipe, Waypoint_AppData.PipeDepth, Waypoint_AppData.PipeName);
+	if(status != CFE_SUCCESS)
+	{
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_ERROR,"Failed to create Return pipe");
+	}
+	
+	//status = CFE_SB_Subscribe(WP_RETURN_MID, Waypoint_AppData.ReturnPipe);
+	status = CFE_SB_Subscribe(WP_GETIC_RETURN_MID, Waypoint_AppData.ReturnPipe);
+	status = CFE_SB_Subscribe(WP_GETPARAMS_RETURN_MID, Waypoint_AppData.ReturnPipe);
+	status = CFE_SB_Subscribe(WP_UPDFLIGHT_RETURN_MID, Waypoint_AppData.ReturnPipe);
+	status = CFE_SB_Subscribe(WP_ACTSCI_RETURN_MID, Waypoint_AppData.ReturnPipe);
+	status = CFE_SB_Subscribe(WP_TAKEPIC_RETURN_MID, Waypoint_AppData.ReturnPipe);
+	status = CFE_SB_Subscribe(WP_UPDPLAN_RETURN_MID, Waypoint_AppData.ReturnPipe);
+	if(status != CFE_SUCCESS) // should have individual error check for each subscribe
+	{
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_ERROR,"Failed to subscribe Return pipe");
+	}
+	
+	Create_Recv_Socket();
+	//Get_InitCond();
+	
+	char pathFile[100];
+	char* directory;
+	directory = "/home/al/Desktop";
+	sprintf(pathFile, "%s/%s", directory, LogStateFile);
+	
+	FILE *fp = fopen(pathFile, "w");
+	fclose(fp);
+	
+	CFE_EVS_SendEvent(WAYPOINT_INITIALIZED_EID, CFE_EVS_INFORMATION,"Waypoint App Initialized");
+	
+} // End Waypoint_init
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Create_Recv_Socket(void)
+{
+	struct sockaddr_in sin_me;
+	
+	CFE_EVS_SendEvent(WAYPOINT_INITIALIZED_EID, CFE_EVS_INFORMATION,"Create_Recv_Socket");
+	
+	if((Recv_SocketID = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
+	{
+		CFE_EVS_SendEvent(CREATE_RECV_SOCK_ERR,CFE_EVS_ERROR,"Failed to create receive socket");
+		CFE_EVS_SendEvent(CREATE_RECV_SOCK_ERR,CFE_EVS_INFORMATION,"Failed to create receive socket");
+	}
+	else
+	{
+		bzero((char *) &sin_me, sizeof(sin_me));
+		sin_me.sin_family = AF_INET;
+		sin_me.sin_port = htons(RECV_PORT);
+		sin_me.sin_addr.s_addr = htonl(INADDR_ANY);
+		
+		if(bind(Recv_SocketID, (struct sockaddr*)&sin_me, sizeof(sin_me)) < 0)
+		{
+			CFE_EVS_SendEvent(BIND_RECV_SOCK_ERR,CFE_EVS_INFORMATION,"Failed to bind to port");
+		}
+		else
+		{
+			SocketConnected = true;
+			//fcntl(Recv_SocketID, F_SETFL, O_NONBLOCK); // this doesn't allow socket to wait
+		}
+	}
+	
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void ProcessUDP(void)
+{
+	CFE_EVS_SendEvent(WAYPOINT_INITIALIZED_EID, CFE_EVS_INFORMATION,"ProcessCommand_1");
+
+	struct sockaddr_in sin_other;
+	socklen_t slen = sizeof(sin_other);
+	char input_buf[ARRAY_SIZE];
+	
+	bzero((char *) &sin_other, sizeof(sin_other));
+	
+	//UdpPacket *recv_data = malloc(sizeof(UdpPacket)); // both of these are probably unnecessary
+	//memset(recv_data, '\0', sizeof(UdpPacket));
+	
+	if(recvfrom(Recv_SocketID, input_buf, sizeof(input_buf), 0, (struct sockaddr *) &sin_other, &slen) < 0)
+	{
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"Couldn't receive packet/No packet to receive"); //should be error
+	}
+	else
+	{		
+		Command_Handler(input_buf);
+	}
+	
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Command_Handler(char *command_name)
+{
+	
+	if(strcmp(command_name,"GetIC") == 0)
+	{
+		CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"GetIC command");
+		//CFE_SB_InitMsg(&Waypoint_AppData.DataPacket, WP_GETIC_MID, sizeof(WP_DataPacket_t), 1);
+		CFE_SB_SendMsg((CFE_SB_Msg_t *) &Waypoint_AppData.GetICPacket);
+	}
+	else if(strcmp(command_name,"GetParams") == 0)
+	{
+		CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"GetParams command");
+		//CFE_SB_SetMsgId(Waypoint_AppData.MsgPtr, WP_GETPARAMS_MID);
+		//int id, length, full_length;
+		//length = CFE_SB_GetUserDataLength(Waypoint_AppData.MsgPtr);
+		//full_length = CFE_SB_GetTotalMsgLength(Waypoint_AppData.MsgPtr);
+		//printf("Data Length: %d, Message Length: %d \n", length, full_length); //debug
+		//id = CFE_SB_GetMsgId(Waypoint_AppData.MsgPtr);
+		//printf("Message ID = %d \n", id);
+		
+		//CFE_SB_InitMsg(&Waypoint_AppData.DataPacket, WP_GETPARAMS_MID, sizeof(WP_DataPacket_t), 0);
+		CFE_SB_SendMsg((CFE_SB_Msg_t *) &Waypoint_AppData.GetParamsPacket);
+	}
+	else if(strcmp(command_name,"ActivateScience") == 0)
+	{
+		CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"ActivateScience command");
+		CFE_SB_SendMsg((CFE_SB_Msg_t *) &Waypoint_AppData.ActSciPacket);
+	}
+	else if(strcmp(command_name,"UpdateFlight") == 0)
+	{
+		CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"UpdateFlight command");
+		CFE_SB_SendMsg((CFE_SB_Msg_t *) &Waypoint_AppData.UpdFlightPacket);
+	}
+	else if(strcmp(command_name,"TakePic") == 0)
+	{
+		CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"TakePic command");
+		CFE_SB_SendMsg((CFE_SB_Msg_t *) &Waypoint_AppData.TakePicPacket);
+	}
+	else if(strcmp(command_name,"UpdatePlan") == 0)
+	{
+		CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"UpdatePlan command");
+		CFE_SB_SendMsg((CFE_SB_Msg_t *) &Waypoint_AppData.UpdPlanPacket);
+	}
+	else
+	{
+		CFE_EVS_SendEvent(WAYPOINT_INITIALIZED_EID, CFE_EVS_INFORMATION,"Invalid Message");
+	}
+	
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Return_Handler(CFE_SB_MsgPtr_t msg)
+{
+	//uint16 CommandCode = CFE_SB_GetCmdCode(msg);
+	CFE_SB_MsgId_t MessageID = CFE_SB_GetMsgId(msg);
+	
+	printf("MessageID = %d \n", MessageID);
+	//printf("GetIC Message ID = %d \n", WP_GETIC_RETURN_MID);
+	
+	CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"Return_Handler entered");
+	switch(MessageID)
+	{
+		case WP_GETIC_RETURN_MID:
+				CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"GetIC return command received");
+				Update_DataPackets(msg);
+				SendReturn2Plexil(Waypoint_AppData.DataPacket);
+				break;
+		
+		case WP_GETPARAMS_RETURN_MID:
+				CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"GetParams return command received");
+				Update_DataPackets(msg);
+				SendReturn2Plexil(Waypoint_AppData.DataPacket);
+				break;
+				
+		case WP_UPDFLIGHT_RETURN_MID:
+				CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"UpdateFlight return command received");
+				Update_DataPackets(msg);
+				SendReturn2Plexil(Waypoint_AppData.DataPacket);
+				break;
+				
+		case WP_ACTSCI_RETURN_MID:
+				CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"ActivateScience return command received");
+				Update_DataPackets(msg);
+				SendReturn2Plexil(Waypoint_AppData.DataPacket);
+				break;
+				
+		case WP_TAKEPIC_RETURN_MID:
+				CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"TakePic return command received");
+				Update_DataPackets(msg);
+				SendReturn2Plexil(Waypoint_AppData.DataPacket);
+				break;
+		
+		case WP_UPDPLAN_RETURN_MID:
+				CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"UpdatePlan return command received");
+				Update_DataPackets(msg);
+				SendReturn2Plexil(Waypoint_AppData.DataPacket);
+				break;
+				
+		default:
+				CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"INVALID return command received");
+				break;
+	}
+	// FIXME: Error check from return value of SendReturn2Plexil
+	 
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int SendReturn2Plexil(WP_DataPacket_t DataPacket)
+{
+	printf("Sending Return value to plexil \n");
+	// Define variables used
+	struct sockaddr_in sin_other; // socket structure
+	int sockID, slen=sizeof(sin_other);
+	
+	// Set up socket
+	if((sockID=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
+	{
+		perror("Socket"); // Error check
+		return 0;
+	}
+	
+	memset((char *) &sin_other, 0, sizeof(sin_other)); // Set socket struct to NULLs
+	sin_other.sin_family = AF_INET; // local host
+	sin_other.sin_port = htons(RETURN_PORT); // Port to send over
+	
+	if(inet_aton(SERVER, &sin_other.sin_addr) == 0)
+	{
+		perror("inet_aton() failed\n"); // Error check
+		return 0;
+	}
+	
+	// send message
+	if(sendto(sockID,(WP_DataPacket_t *)&DataPacket, sizeof(WP_DataPacket_t), 0, (struct sockaddr *) &sin_other, slen) < 0)
+	{
+		perror("Failed to send packet"); // Error Check
+		return 0;
+	}
+	
+	close(sockID);
+	return 1;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int InitTableValidation(void *TblData)
+{
+	int Status = 0;
+	
+	WP_InitTable_t *InitTablePtr = (WP_InitTable_t *)TblData;
+	
+	// Dummy Checks
+	// 1.) Check to make sure A/C starts at origin 
+	if(InitTablePtr->xLoc != 0)
+	{
+		Status = -1; 
+	}
+	else if(InitTablePtr->yLoc != 0)
+	{
+		Status = -1; 
+	}
+	else if(InitTablePtr->zLoc != 0)
+	{
+		Status = -1; 
+	}
+	else
+	{
+		// Do Nothing
+	}
+	
+	return Status;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Update_DataPackets(CFE_SB_MsgPtr_t msg)
+{
+	
+	//int length, full_length, DP_length;
+	
+	//Waypoint_AppData.DataPacket = DataPacket_temp;
+	//WP_DataPacket_t *DataPacket_temp = (WP_DataPacket_t *)CFE_SB_GetUserData(msg);
+	WP_DataPacket_t *DataPacket_temp = (WP_DataPacket_t *)msg;
+	Waypoint_AppData.DataPacket = *DataPacket_temp;
+	Waypoint_AppData.GetICPacket = *DataPacket_temp;
+	Waypoint_AppData.GetParamsPacket = *DataPacket_temp;
+	Waypoint_AppData.UpdFlightPacket = *DataPacket_temp;
+	Waypoint_AppData.ActSciPacket = *DataPacket_temp;
+	Waypoint_AppData.TakePicPacket = *DataPacket_temp;
+	Waypoint_AppData.UpdPlanPacket = *DataPacket_temp;
+	
+	CFE_SB_InitMsg(&Waypoint_AppData.GetICPacket, WP_GETIC_MID, sizeof(WP_DataPacket_t), 0);
+	CFE_SB_InitMsg(&Waypoint_AppData.GetParamsPacket, WP_GETPARAMS_MID, sizeof(WP_DataPacket_t), 0);
+	CFE_SB_InitMsg(&Waypoint_AppData.UpdFlightPacket, WP_UPDFLIGHT_MID, sizeof(WP_DataPacket_t), 0);
+	CFE_SB_InitMsg(&Waypoint_AppData.ActSciPacket, WP_ACTSCI_MID, sizeof(WP_DataPacket_t), 0);
+	CFE_SB_InitMsg(&Waypoint_AppData.TakePicPacket, WP_TAKEPIC_MID, sizeof(WP_DataPacket_t), 0);
+	CFE_SB_InitMsg(&Waypoint_AppData.UpdPlanPacket, WP_UPDPLAN_MID, sizeof(WP_DataPacket_t), 0);
+	
+	
+	printf("Current Data Packet: \n Success = %s, \n xWaypoint_A = %f, \n yWaypoint_A = %f, \n zWaypoint_A = %f, \n xWaypoint_B = %f, \n yWaypoint_B = %f, \n zWaypoint_B = %f, \n vel = %f, \n xLoc = %f, \n yLoc = %f, \n zLoc = %f, \n velTarget = %f, \n xTarget = %f, \n yTarget = %f, \n zTarget = %f, \n xFlag = %d, \n yFlag = %d, \n zFlag = %d, \n Waypoint = %c \n", Waypoint_AppData.DataPacket.Success, Waypoint_AppData.DataPacket.xWaypoint_A, Waypoint_AppData.DataPacket.yWaypoint_A, Waypoint_AppData.DataPacket.zWaypoint_A, Waypoint_AppData.DataPacket.xWaypoint_B, Waypoint_AppData.DataPacket.yWaypoint_B, Waypoint_AppData.DataPacket.zWaypoint_B, Waypoint_AppData.DataPacket.vel, Waypoint_AppData.DataPacket.xLoc, Waypoint_AppData.DataPacket.yLoc, Waypoint_AppData.DataPacket.zLoc, Waypoint_AppData.DataPacket.velTarget, Waypoint_AppData.DataPacket.xTarget, Waypoint_AppData.DataPacket.yTarget, Waypoint_AppData.DataPacket.zTarget, Waypoint_AppData.DataPacket.xFlag, Waypoint_AppData.DataPacket.yFlag, Waypoint_AppData.DataPacket.zFlag, Waypoint_AppData.DataPacket.Waypoint);
+	
+LogState(Waypoint_AppData.DataPacket);
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void LogState(WP_DataPacket_t State)
+{
+	
+	sprintf(pathFile, "%s/%s", directory, LogStateFile);
+	
+	FILE *fp = fopen(pathFile, "a");
+
+	fprintf(fp, "%f, %f, %f, %f, %f, %f, %f, %f, %f, %f \n", Waypoint_AppData.DataPacket.xWaypoint_A, Waypoint_AppData.DataPacket.yWaypoint_A, Waypoint_AppData.DataPacket.zWaypoint_A, Waypoint_AppData.DataPacket.xWaypoint_B, Waypoint_AppData.DataPacket.yWaypoint_B, Waypoint_AppData.DataPacket.zWaypoint_B, Waypoint_AppData.DataPacket.vel, Waypoint_AppData.DataPacket.xLoc, Waypoint_AppData.DataPacket.yLoc, Waypoint_AppData.DataPacket.zLoc);
+	
+	fclose(fp);
+	
+}
+
+
+
+
+
+
+
+
+
+

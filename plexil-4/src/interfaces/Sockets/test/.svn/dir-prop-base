@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 65
+.deps
+.dirstamp
+Makedepend
+simple_server_main
+simple_client_main
+
+END

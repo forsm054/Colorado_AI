@@ -1,0 +1,6 @@
+TestExec-exec-test-runner.o: exec-test-runner.cc ExecTestRunner.hh \
+ ../../utils/lifecycle-utils.h
+
+ExecTestRunner.hh:
+
+../../utils/lifecycle-utils.h:

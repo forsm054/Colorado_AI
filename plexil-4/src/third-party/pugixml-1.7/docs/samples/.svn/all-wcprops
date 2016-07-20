@@ -1,0 +1,203 @@
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples
+END
+weekly-utf-16.xml
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/weekly-utf-16.xml
+END
+traverse_walker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/traverse_walker.cpp
+END
+modify_remove.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/modify_remove.cpp
+END
+load_memory.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/load_memory.cpp
+END
+xpath_query.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/xpath_query.cpp
+END
+save_options.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/save_options.cpp
+END
+xpath_variables.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/xpath_variables.cpp
+END
+tree.xml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/tree.xml
+END
+traverse_rangefor.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/traverse_rangefor.cpp
+END
+load_file.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/load_file.cpp
+END
+modify_base.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/modify_base.cpp
+END
+text.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/text.cpp
+END
+save_custom_writer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/save_custom_writer.cpp
+END
+save_subtree.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/save_subtree.cpp
+END
+load_error_handling.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/load_error_handling.cpp
+END
+weekly-shift_jis.xml
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/weekly-shift_jis.xml
+END
+custom_memory_management.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/custom_memory_management.cpp
+END
+modify_add.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/modify_add.cpp
+END
+save_declaration.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/save_declaration.cpp
+END
+save_stream.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/save_stream.cpp
+END
+character.xml
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/character.xml
+END
+traverse_predicate.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/traverse_predicate.cpp
+END
+traverse_iter.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/traverse_iter.cpp
+END
+xgconsole.xml
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/xgconsole.xml
+END
+weekly-utf-8.xml
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/weekly-utf-8.xml
+END
+xpath_select.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/xpath_select.cpp
+END
+include.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/include.cpp
+END
+traverse_base.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/traverse_base.cpp
+END
+load_options.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/load_options.cpp
+END
+load_stream.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/load_stream.cpp
+END
+transitions.xml
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/transitions.xml
+END
+xpath_error.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/xpath_error.cpp
+END
+save_file.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/docs/samples/save_file.cpp
+END

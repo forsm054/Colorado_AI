@@ -1,0 +1,26 @@
+<Interfaces>
+ <Adapter AdapterType="OSNativeTime">
+  <LookupNames>time</LookupNames>
+ </Adapter>
+  <Adapter AdapterType="Utility">
+ </Adapter>
+ <Adapter AdapterType="IpcAdapter" Server="localhost" AllowDuplicateMessages="true">
+  <CommandNames>
+	ReceiveMessage, UpdateLookup,  ReceiveCommand, SendReturnValue, GetParameter
+  </CommandNames>
+  <ExternalLookups>
+    <Lookup name="vel" type="Real" value="1"/>
+    <Lookup name="xLoc" type="Real" value="0"/>
+    <Lookup name="yLoc" type="Real" value="0"/>
+    <Lookup name="zLoc" type="Real" value="0"/>
+    <Lookup name="xTarget" type="Real" value="0"/>
+    <Lookup name="yTarget" type="Real" value="0"/>
+    <Lookup name="xWaypoint_A" type="Real" value="0"/>
+    <Lookup name="yWaypoint_A" type="Real" value="0"/>
+    <Lookup name="zWaypoint_A" type="Real" value="0"/>
+    <Lookup name="xWaypoint_B" type="Real" value="0"/>
+    <Lookup name="yWaypoint_B" type="Real" value="0"/>
+    <Lookup name="zWaypoint_B" type="Real" value="0"/>
+  </ExternalLookups>
+ </Adapter>
+</Interfaces>

@@ -1,0 +1,67 @@
+EnergySources.o: EnergySources.cc MyOpenGL.hh EnergySources.hh \
+ /home/al/Desktop/plexil-4/include/ThreadMutex.hh Macros.hh
+Goals.o: Goals.cc /home/al/Desktop/plexil-4/include/Debug.hh \
+ /home/al/Desktop/plexil-4/include/plexil-config.h MyOpenGL.hh Macros.hh \
+ Goals.hh
+IpcRobotAdapter.o: IpcRobotAdapter.cc IpcRobotAdapter.hh \
+ /home/al/Desktop/plexil-4/include/ipc.h \
+ /home/al/Desktop/plexil-4/include/ipc-data-formats.h \
+ /home/al/Desktop/plexil-4/include/IpcFacade.hh \
+ /home/al/Desktop/plexil-4/include/ipc.h \
+ /home/al/Desktop/plexil-4/include/ipc-data-formats.h \
+ /home/al/Desktop/plexil-4/include/ConstantMacros.hh \
+ /home/al/Desktop/plexil-4/include/RecursiveThreadMutex.hh \
+ /home/al/Desktop/plexil-4/include/Value.hh \
+ /home/al/Desktop/plexil-4/include/ValueType.hh \
+ /home/al/Desktop/plexil-4/include/ParserException.hh \
+ /home/al/Desktop/plexil-4/include/ArrayFwd.hh \
+ /home/al/Desktop/plexil-4/include/plexil-config.h RobotBase.hh \
+ TerrainBase.hh EnergySources.hh \
+ /home/al/Desktop/plexil-4/include/ThreadMutex.hh Goals.hh \
+ RobotPositionServer.hh /home/al/Desktop/plexil-4/include/Value.hh \
+ /home/al/Desktop/plexil-4/include/Debug.hh \
+ /home/al/Desktop/plexil-4/include/plexil-config.h \
+ /home/al/Desktop/plexil-4/include/Error.hh \
+ /home/al/Desktop/plexil-4/include/ThreadSpawn.hh
+MazeTerrain.o: MazeTerrain.cc MyOpenGL.hh MazeTerrain.hh TerrainBase.hh
+Robot.o: Robot.cc IpcRobotAdapter.hh \
+ /home/al/Desktop/plexil-4/include/ipc.h \
+ /home/al/Desktop/plexil-4/include/ipc-data-formats.h \
+ /home/al/Desktop/plexil-4/include/IpcFacade.hh \
+ /home/al/Desktop/plexil-4/include/ipc.h \
+ /home/al/Desktop/plexil-4/include/ipc-data-formats.h \
+ /home/al/Desktop/plexil-4/include/ConstantMacros.hh \
+ /home/al/Desktop/plexil-4/include/RecursiveThreadMutex.hh \
+ /home/al/Desktop/plexil-4/include/Value.hh \
+ /home/al/Desktop/plexil-4/include/ValueType.hh \
+ /home/al/Desktop/plexil-4/include/ParserException.hh \
+ /home/al/Desktop/plexil-4/include/ArrayFwd.hh \
+ /home/al/Desktop/plexil-4/include/plexil-config.h MyOpenGL.hh Macros.hh \
+ Robot.hh RobotBase.hh TerrainBase.hh EnergySources.hh \
+ /home/al/Desktop/plexil-4/include/ThreadMutex.hh Goals.hh \
+ RobotPositionServer.hh /home/al/Desktop/plexil-4/include/Value.hh \
+ /home/al/Desktop/plexil-4/include/ArrayImpl.hh \
+ /home/al/Desktop/plexil-4/include/Array.hh \
+ /home/al/Desktop/plexil-4/include/Debug.hh \
+ /home/al/Desktop/plexil-4/include/plexil-config.h \
+ /home/al/Desktop/plexil-4/include/Error.hh
+RobotPositionServer.o: RobotPositionServer.cc RobotPositionServer.hh \
+ /home/al/Desktop/plexil-4/include/ThreadMutex.hh
+RobotSimulator.o: RobotSimulator.cc \
+ /home/al/Desktop/plexil-4/include/Debug.hh \
+ /home/al/Desktop/plexil-4/include/plexil-config.h MyOpenGL.hh Macros.hh \
+ EnergySources.hh /home/al/Desktop/plexil-4/include/ThreadMutex.hh \
+ MazeTerrain.hh TerrainBase.hh Goals.hh IpcRobotAdapter.hh \
+ /home/al/Desktop/plexil-4/include/ipc.h \
+ /home/al/Desktop/plexil-4/include/ipc-data-formats.h \
+ /home/al/Desktop/plexil-4/include/IpcFacade.hh \
+ /home/al/Desktop/plexil-4/include/ipc.h \
+ /home/al/Desktop/plexil-4/include/ipc-data-formats.h \
+ /home/al/Desktop/plexil-4/include/ConstantMacros.hh \
+ /home/al/Desktop/plexil-4/include/RecursiveThreadMutex.hh \
+ /home/al/Desktop/plexil-4/include/Value.hh \
+ /home/al/Desktop/plexil-4/include/ValueType.hh \
+ /home/al/Desktop/plexil-4/include/ParserException.hh \
+ /home/al/Desktop/plexil-4/include/ArrayFwd.hh \
+ /home/al/Desktop/plexil-4/include/plexil-config.h Robot.hh RobotBase.hh \
+ RobotPositionServer.hh /home/al/Desktop/plexil-4/include/Value.hh

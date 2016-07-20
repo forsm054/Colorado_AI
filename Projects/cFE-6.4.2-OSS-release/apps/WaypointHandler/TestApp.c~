@@ -1,0 +1,23 @@
+#include "cfe.h"
+
+void Test_AppMain(void)
+{
+
+	// Register Application
+	CRE_ES_RegisterApp();
+	
+	Status = Test_AppInit();
+	if (Status != CFE_SUCCESS)
+	{
+		Test_AppData.RunStatus = CFE_ES_APP_ERROR;
+	}
+	
+	while(CFE_ES_RunLoop(&Test_AppData.RunStatus == TRUE)
+	{
+	
+	
+	}// end while
+	 
+
+
+} // End TestAppMain()

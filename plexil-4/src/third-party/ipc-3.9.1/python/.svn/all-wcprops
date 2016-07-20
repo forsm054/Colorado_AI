@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/python
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/python/README
+END
+formatters.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/python/formatters.py
+END
+ipcPython.c
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/python/ipcPython.c
+END
+primFmttrs.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/python/primFmttrs.py
+END
+IPC.i
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/python/IPC.i
+END
+ipcPython.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/python/ipcPython.h
+END
+ipcPython.py
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/python/ipcPython.py
+END
+test.py
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/python/test.py
+END
+GNUmakefile
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/python/GNUmakefile
+END

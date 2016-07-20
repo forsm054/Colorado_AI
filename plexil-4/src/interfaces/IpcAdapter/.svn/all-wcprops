@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/p/plexil/code/!svn/ver/4494/branches/plexil-4/src/interfaces/IpcAdapter
+END
+IpcAdapter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4494/branches/plexil-4/src/interfaces/IpcAdapter/IpcAdapter.cc
+END
+initIpcAdapter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/IpcAdapter/initIpcAdapter.cc
+END
+MessageQueueMap.hh
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/3976/branches/plexil-4/src/interfaces/IpcAdapter/MessageQueueMap.hh
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/interfaces/IpcAdapter/Makefile.am
+END
+IpcAdapter.hh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4416/branches/plexil-4/src/interfaces/IpcAdapter/IpcAdapter.hh
+END
+MessageQueueMap.cc
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/IpcAdapter/MessageQueueMap.cc
+END

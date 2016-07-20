@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/p/plexil/code/!svn/ver/4506/branches/plexil-4/makeinclude
+END
+platform-Linux.make
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/4339/branches/plexil-4/makeinclude/platform-Linux.make
+END
+platform-defs.make
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/makeinclude/platform-defs.make
+END
+platform-CYGWIN_NT-5.1.make
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4329/branches/plexil-4/makeinclude/platform-CYGWIN_NT-5.1.make
+END
+platform-vxworks.make
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/4329/branches/plexil-4/makeinclude/platform-vxworks.make
+END
+platform-Darwin.make
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/p/plexil/code/!svn/ver/4339/branches/plexil-4/makeinclude/platform-Darwin.make
+END
+generic-plexil.make
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/makeinclude/generic-plexil.make
+END
+standard-targets.make
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/makeinclude/standard-targets.make
+END
+platform-FreeBSD.make
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/4338/branches/plexil-4/makeinclude/platform-FreeBSD.make
+END
+platform-arm-linux.make
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/4339/branches/plexil-4/makeinclude/platform-arm-linux.make
+END
+standard-defs.make
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/p/plexil/code/!svn/ver/4506/branches/plexil-4/makeinclude/standard-defs.make
+END

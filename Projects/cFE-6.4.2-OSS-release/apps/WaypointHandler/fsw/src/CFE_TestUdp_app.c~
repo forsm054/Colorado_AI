@@ -1,0 +1,181 @@
+/////////////////////////////////////////////////////////////////////////
+//
+//  README
+//
+//  Name: Waypoint_Plan.ple
+//  By: Alec Forsman - Red Canyon Software
+//  Created: 3/7/16
+//  Updated: 3/12/16
+//
+//  Description:
+//		This is a Core Flight Application intended to help get familiar with
+//		the syntax. The app simply creates a pipe to receive messages, and when
+//		a message is received it will send a message back via UDP. This can
+//		be used in the future as the layout for communication between PLEXIL and
+//		CFE.
+//
+//	Updates:
+//		3/7/16
+//			- Created main function and header file
+//		3/11/16
+//			- Added Send Telemetry function
+//		3/12/16
+//			- Implemented the basic syntax, mainly the init app section, by following
+//				example in Developers Guide
+//			- Got to successfully compile and send a UDP packet to a socket
+//			- Started implementing receive pipe
+//
+//	Issues/ToDo:
+//		- Implement a receive pipe.
+//		- Syntax to send a message back once a message is received
+//		- Once the above is completed, use this as a layout for communication w/ PLEXIL
+//				--> The way I see it laying out is that there will be separate apps for each
+//						PLEXIL command
+//				--> These applications will need to be able to perform calculations on data and send
+//						the current state back to plexil to make decisions
+//
+/////////////////////////////////////////////////////////////////////////
+
+#include "CFE_TestUdp_app.h"
+#include "TestUdp_msg.h"
+
+#define TESTUDP_HK_TLM_MID	0x0321 // SB Message ID for TestUdp HK Packet....
+#define TESTUDP_CMD_MID		0x0123 // Message ID to route to pipe
+#define TESTUDP_SEND_HK_MID	0x1881
+
+TestUdp_AppData_t	TestUdp_AppData;
+TestUdp_hk_t	TestUdp_status; // housekeeping struct
+CFE_SB_PipeId_t	TestUdp_Tlm_pipe;
+CFE_SB_PipeId_t TestUdp_Recv_pipe;
+
+// Initialize Functions
+int TestUdp_init(void);
+int Send_Telemetry(void);
+
+// Main Function
+void TestUdp_AppMain(void)
+{
+	uint32 Status;
+	uint32 TlmStatus;
+	
+	Status = TestUdp_init(); // initialize the app (Success returns CFE_SUCCESS)
+	if (Status != CFE_SUCCESS)
+	{
+		TestUdp_AppData.RunStatus = CFE_ES_APP_ERROR;
+	}
+	
+	// TestUdp Run Loop
+	while(CFE_ES_RunLoop(&TestUdp_AppData.RunStatus) == TRUE)
+	{
+		TlmStatus = Send_Telemetry();
+		
+		if (TlmStatus == CFE_SUCCESS);
+		{
+			CFE_ES_ExitApp(TestUdp_AppData.RunStatus);
+		}
+		
+	} // End while
+	
+} // End TestUdp_AppMain
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int TestUdp_init(void)
+{
+	int status;
+	//uint16 i;
+	//char TlmPipeName[16];
+	//uint16 TlmPipeDepth;	
+	
+	CFE_ES_RegisterApp(); // Register app w/ CFE
+	
+	TestUdp_AppData.RunStatus = CFE_ES_APP_RUN;
+	
+	//TlmPipeDepth = 64;
+	TestUdp_AppData.PipeDepth = TESTUDP_PIPE_DEPTH;
+	strcpy(TestUdp_AppData.PipeName, "TESTUDP_RECV_PIPE");
+	
+	// Register event filter table?
+	
+	// Initialize SB message (Address of SB Msg data buffer, SB msg ID associated w/ data,
+	//												size of buffer, buffer should be cleared by CFE);
+	CFE_SB_InitMsg(&TestUdp_AppData.HkPacket,TESTUDP_HK_TLM_MID,sizeof(TestUdp_HkPacket_t),TRUE);
+	
+	
+	// Create Receive (command) pipe
+	status = CFE_SB_CreatePipe(&TestUdp_AppData.RecvPipe, TestUdp_AppData.PipeDepth, TestUdp_AppData.PipeName);
+	if(status != CFE_SUCCESS)
+	{
+		CFE_EVS_SendEvent(CREATE_PIPE_ERR,CFE_EVS_ERROR,"Failed to create pipe");
+		return(status);
+	}
+	
+	// Subscribe to housekeeping data
+	status = CFE_SB_Subscribe(TESTUDP_SEND_HK_MID, TestUdp_AppData.RecvPipe);
+	if(status != CFE_SUCCESS)
+	{
+		CFE_EVS_SendEvent(CREATE_PIPE_ERR,CFE_EVS_ERROR,"Failed to subscribe pipe");
+		return(status);
+	}
+	
+	// Subscribe to ground command packets
+	status = CFE_SB_Subscribe(TESTUDP_CMD_MID, TestUdp_AppData.RecvPipe);
+	if(status != CFE_SUCCESS)
+	{
+		CFE_EVS_SendEvent(CREATE_PIPE_ERR,CFE_EVS_ERROR,"Failed to subscribe to command data");
+		return(status);
+	}
+	
+	return(CFE_SUCCESS);
+	
+} // End TestUdp_init
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+int Send_Telemetry(void)
+{
+	struct sockaddr_in sin_other;
+	int s, slen=sizeof(sin_other);
+	char *buf;
+	//int message[BUFLEN];
+	
+	if((s=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
+	{
+		//perror("Socket");
+		CFE_EVS_SendEvent(CREATE_SOCK_ERR,CFE_EVS_ERROR,"Failed to create socket");
+	}
+	
+	memset((char *) &sin_other, 0, sizeof(sin_other));
+	sin_other.sin_family = AF_INET;
+	sin_other.sin_port = htons(TLM_PORT); // 8033
+	
+	if(inet_aton(TLM_ADDR, &sin_other.sin_addr) < 0)
+	{
+		CFE_EVS_SendEvent(CREATE_SOCK_ERR,CFE_EVS_ERROR,"Socket failed to connect to host");
+	}
+	
+	//while(1)
+	//{
+		//memset(buf, '\0', BUFLEN);
+		//printf("Enter Message: ");
+		//scanf("%s",buf);
+		
+		buf = "CFE_UDP!!!";
+		
+		// send message
+		if(sendto(s,buf, sizeof(buf), 0, (struct sockaddr *) &sin_other, slen) < 0)
+		{
+			CFE_EVS_SendEvent(SEND_SOCK_ERR,CFE_EVS_ERROR,"Socket failed to send data");
+		}
+	//}
+	return(CFE_SUCCESS);
+}
+
+
+
+
+
+
+
+

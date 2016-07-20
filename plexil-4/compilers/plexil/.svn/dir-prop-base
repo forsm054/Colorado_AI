@@ -1,0 +1,12 @@
+K 10
+svn:ignore
+V 18
+classes
+generated
+
+K 13
+svn:mergeinfo
+V 93
+/branches/exit-condition/src/compilers/plexil:2763-2838
+/trunk/src/compilers/plexil:2323-2627
+END

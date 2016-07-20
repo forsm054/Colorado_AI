@@ -1,0 +1,143 @@
+/////////////////////////////////////////////////////////////////////////
+//
+//  README
+//
+//  Name: Fly2A_App.c
+//  By: Alec Forsman - Red Canyon Software
+//  Created: 5/12/16
+//  Updated: 5/12/16
+//
+//  Description:
+//		This is a Core Flight Application intended to model the UpdateFlight commands in the PLEXIL
+//	  Waypoint plan. The app simply creates a pipe to receive messages, and when
+//		a message is received it will perform the corresponding neccessary functions and send data
+//		back so PLEXIL can continue to update the flight. This can be used in the future as the
+//		layout for communication between PLEXIL and CFE.
+//
+//	Updates:
+//		5/12/16
+//			- Created
+//			- Created SB pipe to receive commands from TestUdp_app.c
+//		5/13/16
+//			- Improved naming conventions
+//
+//	Issues/ToDo:
+//		- Interface with PLEXIL
+//		- Setup to perform neccessary calculations
+//		- Send data back to TestUdp_app.c
+//		- Get app to receive real data
+//		- Combine Command Pack structure and Command structure. Shouldn't need both
+//		- clean up
+//		- Implement error checks
+//		- NOTE: If app doesn't run, 90% of the time its an issue with the code(will still happen if it compiles)
+//
+/////////////////////////////////////////////////////////////////////////
+
+
+#include "Fly2A_App.h"
+#include "Fly2A_Events.h"
+#include "Fly2A_Msgids.h"
+
+Fly2A_AppData_t	Fly2A_AppData;
+
+static CFE_EVS_BinFilter_t Fly2A_EventFilters[] = 
+	{
+		{DEBUG,										0x0000},
+	};		
+		
+
+// Main Function
+void Fly2A_AppMain(void)
+{
+	uint32 Status;
+
+	CFE_ES_RegisterApp(); // Register app w/ CFE
+	Fly2A_init(); // initialize the app. Sets up needed params (Success returns CFE_SUCCESS)
+
+	// Fly2A Run Loop
+	while(CFE_ES_RunLoop(&Fly2A_AppData.RunStatus) == TRUE)
+	{
+	
+		Status = CFE_SB_RcvMsg(&Fly2A_AppData.MsgPtr, Fly2A_AppData.Fly2APipe, CFE_SB_PEND_FOREVER);
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"FLY2A MESSAGE RECEIVED!!!"); //debug
+
+		if (Status == CFE_SUCCESS);
+		{
+			
+			if(CFE_SB_GetMsgId(Fly2A_AppData.MsgPtr) == FLY2A_MID)
+			{
+				
+				CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"Message ID matches."); //debug
+				
+				//CFE_SB_InitMsg(&Fly2A_AppData.BusPacket_MP, FLY2A_RETURN_MID, sizeof(Fly2A_BusPacket_t), FALSE);
+				
+				//CFE_ES_ExitApp(Fly2A_AppData.RunStatus);
+				CFE_SB_SendMsg((CFE_SB_Msg_t *) &Fly2A_AppData.BusPacket_MP);
+			}
+			else if(CFE_SB_GetMsgId(Fly2A_AppData.MsgPtr) == MONITORSTATE_RETURN2A_MID)
+			{
+				Fly2A_AppData.BusPacket_Tlm = UpdateBusPacket_A(Fly2A_AppData.BusPacket_Tlm);
+				CFE_SB_SendMsg((CFE_SB_Msg_t *) &Fly2A_AppData.BusPacket_Tlm);			
+			}
+		}
+		
+	} // End while
+
+} // End Fly2A_AppMain
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Fly2A_init(void)
+{
+	int status;
+	
+	CFE_EVS_Register(Fly2A_EventFilters, sizeof(Fly2A_EventFilters)/sizeof(CFE_EVS_BinFilter_t), CFE_EVS_BINARY_FILTER); // Register Event filter table so events can be output
+	
+	Fly2A_AppData.RunStatus = CFE_ES_APP_RUN;
+	
+	Fly2A_AppData.PipeDepth = FLY2A_PIPE_DEPTH;
+	strcpy(Fly2A_AppData.PipeName, "FLY2A_PIPE");	
+	
+	// Create Receive (command) pipe
+	status = CFE_SB_CreatePipe(&Fly2A_AppData.Fly2APipe, Fly2A_AppData.PipeDepth, Fly2A_AppData.PipeName);
+	if(status != CFE_SUCCESS)
+	{
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_ERROR,"Failed to create Fly2A pipe");
+	}
+	
+	// Subscribe //FIXME: Edit status variables
+	status = CFE_SB_Subscribe(FLY2A_MID, Fly2A_AppData.Fly2APipe);
+	status = CFE_SB_Subscribe(MONITORSTATE_RETURN2A_MID, Fly2A_AppData.Fly2APipe);
+	if(status != CFE_SUCCESS)
+	{
+		CFE_EVS_SendEvent(DEBUG,CFE_EVS_ERROR,"Failed to subscribe to Fly2A pipe");
+	}
+	
+	CFE_SB_InitMsg(&Fly2A_AppData.BusPacket_MP, MONITORSTATE_MID, sizeof(Fly2A_BusPacket_t), TRUE);
+	CFE_SB_InitMsg(&Fly2A_AppData.BusPacket_Tlm, FLY2A_RETURN_MID, sizeof(Fly2A_BusPacket_t), TRUE);
+	
+	
+	CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"Fly2A App Initialized");
+	
+
+} // End Fly2A_init
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//FIXME: fcn not applicable anymore
+Fly2A_BusPacket_t UpdateBusPacket_A(Fly2A_BusPacket_t Data)
+{
+	
+	CFE_EVS_SendEvent(DEBUG, CFE_EVS_INFORMATION,"Updating Bus Packet");
+	strcpy(Data.cmd,"Fly2A");
+	Data.Success = true;
+	
+	return Data;
+}
+
+
+
+
+

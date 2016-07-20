@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/src
+END
+pugixml.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/src/pugixml.cpp
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/src/Makefile.am
+END
+pugixml.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/src/pugixml.hpp
+END
+pugiconfig.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/p/plexil/code/!svn/ver/4453/branches/plexil-4/src/third-party/pugixml-1.7/src/pugiconfig.hpp
+END

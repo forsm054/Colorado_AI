@@ -1,0 +1,15 @@
+K 10
+svn:ignore
+V 39
+*.dylib
+*.so
+.deps
+Makedepend
+Makefile
+
+K 13
+svn:mergeinfo
+V 103
+/branches/exit-condition/src/interfaces/UdpAdapter:2763-2838
+/trunk/src/interfaces/UdpAdapter:2323-2488
+END

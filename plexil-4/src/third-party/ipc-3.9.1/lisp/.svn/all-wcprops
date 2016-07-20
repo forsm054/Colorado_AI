@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp
+END
+INSTALL
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/INSTALL
+END
+mclMacros.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/mclMacros.lisp
+END
+GNUmakefile
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/GNUmakefile
+END
+ipc-compile.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/ipc-compile.lisp
+END
+winMacros.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/winMacros.lisp
+END
+ipc-package.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/ipc-package.lisp
+END
+ipcForeignCalls.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/ipcForeignCalls.lisp
+END
+formatters.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/formatters.lisp
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/README
+END
+lwMacros.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/lwMacros.lisp
+END
+primFmttrs.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/primFmttrs.lisp
+END
+ipc-load.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/ipc-load.lisp
+END
+ipc-system.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/third-party/ipc-3.9.1/lisp/ipc-system.lisp
+END

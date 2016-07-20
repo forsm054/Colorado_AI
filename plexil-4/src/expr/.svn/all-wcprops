@@ -1,0 +1,293 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/p/plexil/code/!svn/ver/4469/branches/plexil-4/src/expr
+END
+Assignable.hh
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4468/branches/plexil-4/src/expr/Assignable.hh
+END
+VariableConflictSet.cc
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/4161/branches/plexil-4/src/expr/VariableConflictSet.cc
+END
+ArrayVariable.cc
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/p/plexil/code/!svn/ver/4468/branches/plexil-4/src/expr/ArrayVariable.cc
+END
+UserVariable.cc
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/4468/branches/plexil-4/src/expr/UserVariable.cc
+END
+BooleanOperators.hh
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/expr/BooleanOperators.hh
+END
+Alias.cc
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/p/plexil/code/!svn/ver/4148/branches/plexil-4/src/expr/Alias.cc
+END
+AssignableImpl.cc
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4469/branches/plexil-4/src/expr/AssignableImpl.cc
+END
+ExpressionImpl.hh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/expr/ExpressionImpl.hh
+END
+Comparisons.cc
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/expr/Comparisons.cc
+END
+ArrayReference.cc
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4468/branches/plexil-4/src/expr/ArrayReference.cc
+END
+Function.hh
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/expr/Function.hh
+END
+NotifierImpl.cc
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/4412/branches/plexil-4/src/expr/NotifierImpl.cc
+END
+ArithmeticOperators.hh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/3880/branches/plexil-4/src/expr/ArithmeticOperators.hh
+END
+Constant.hh
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/expr/Constant.hh
+END
+ExpressionConstants.hh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/4109/branches/plexil-4/src/expr/ExpressionConstants.hh
+END
+Assignable.cc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4160/branches/plexil-4/src/expr/Assignable.cc
+END
+Expression.hh
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4162/branches/plexil-4/src/expr/Expression.hh
+END
+SimpleBooleanVariable.hh
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/4468/branches/plexil-4/src/expr/SimpleBooleanVariable.hh
+END
+NodeConnector.hh
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/p/plexil/code/!svn/ver/4161/branches/plexil-4/src/expr/NodeConnector.hh
+END
+NodeConstantExpressions.hh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/4024/branches/plexil-4/src/expr/NodeConstantExpressions.hh
+END
+BooleanOperators.cc
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/p/plexil/code/!svn/ver/4148/branches/plexil-4/src/expr/BooleanOperators.cc
+END
+StringOperators.hh
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/expr/StringOperators.hh
+END
+ExpressionImpl.cc
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4374/branches/plexil-4/src/expr/ExpressionImpl.cc
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/p/plexil/code/!svn/ver/4452/branches/plexil-4/src/expr/Makefile.am
+END
+Function.cc
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/p/plexil/code/!svn/ver/4132/branches/plexil-4/src/expr/Function.cc
+END
+ExprVec.hh
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/p/plexil/code/!svn/ver/4132/branches/plexil-4/src/expr/ExprVec.hh
+END
+ArrayOperators.hh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4431/branches/plexil-4/src/expr/ArrayOperators.hh
+END
+OperatorImpl.hh
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/expr/OperatorImpl.hh
+END
+ArithmeticOperators.cc
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/3880/branches/plexil-4/src/expr/ArithmeticOperators.cc
+END
+Constant.cc
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/p/plexil/code/!svn/ver/4024/branches/plexil-4/src/expr/Constant.cc
+END
+ExpressionConstants.cc
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/4111/branches/plexil-4/src/expr/ExpressionConstants.cc
+END
+VariableConflictSet.hh
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/p/plexil/code/!svn/ver/4157/branches/plexil-4/src/expr/VariableConflictSet.hh
+END
+ArrayVariable.hh
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/p/plexil/code/!svn/ver/4468/branches/plexil-4/src/expr/ArrayVariable.hh
+END
+UserVariable.hh
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/4468/branches/plexil-4/src/expr/UserVariable.hh
+END
+Expression.cc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/p/plexil/code/!svn/ver/4162/branches/plexil-4/src/expr/Expression.cc
+END
+SimpleBooleanVariable.cc
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/p/plexil/code/!svn/ver/4468/branches/plexil-4/src/expr/SimpleBooleanVariable.cc
+END
+NodeConstantExpressions.cc
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/p/plexil/code/!svn/ver/4025/branches/plexil-4/src/expr/NodeConstantExpressions.cc
+END
+Alias.hh
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/p/plexil/code/!svn/ver/4147/branches/plexil-4/src/expr/Alias.hh
+END
+AssignableImpl.hh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4143/branches/plexil-4/src/expr/AssignableImpl.hh
+END
+Operator.hh
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/p/plexil/code/!svn/ver/3971/branches/plexil-4/src/expr/Operator.hh
+END
+StringOperators.cc
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/expr/StringOperators.cc
+END
+Comparisons.hh
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/expr/Comparisons.hh
+END
+ArrayReference.hh
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4468/branches/plexil-4/src/expr/ArrayReference.hh
+END
+NotifierImpl.hh
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/4414/branches/plexil-4/src/expr/NotifierImpl.hh
+END
+ExprVec.cc
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/p/plexil/code/!svn/ver/4174/branches/plexil-4/src/expr/ExprVec.cc
+END
+ArrayOperators.cc
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/p/plexil/code/!svn/ver/4431/branches/plexil-4/src/expr/ArrayOperators.cc
+END
+OperatorImpl.cc
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/expr/OperatorImpl.cc
+END
+ExpressionListener.hh
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/p/plexil/code/!svn/ver/4358/branches/plexil-4/src/expr/ExpressionListener.hh
+END

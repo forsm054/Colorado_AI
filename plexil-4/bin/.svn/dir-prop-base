@@ -1,0 +1,26 @@
+K 10
+svn:ignore
+V 300
+AppFrameworkTest
+IpcExec
+PlexilSimulator
+SSWGTestServer
+TestExec
+benchmark
+central
+exec-module-tests
+expr-module-tests
+intfc-module-tests
+parser-module-tests
+roboSimExec
+robotSimulator
+silence
+simple_client_main
+simple_server_main
+simulator
+universalExec
+utils-module-tests
+value-module-tests
+xdrgen
+
+END

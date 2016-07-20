@@ -1,0 +1,17 @@
+Command pprint (...);
+Command UpdateLookup (...);
+Command SendReturnValue (...);
+
+Test_Simulator:
+{
+	Real x = 1;
+	
+	TestCommand: OnCommand "Test" (Real a,Real b)
+	{
+			
+		pprint("Entering TestCommand");
+		UpdateLookup("c",x);
+		UpdateLookup("d",x);
+		x = x+1;
+	}
+}

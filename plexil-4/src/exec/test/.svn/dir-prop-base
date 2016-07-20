@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 59
+.deps
+.dirstamp
+exec-module-tests*
+Makedepend
+RUN_*.output
+
+END

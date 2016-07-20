@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/p/plexil/code/!svn/ver/4518/branches/plexil-4/src/interfaces/UdpAdapter
+END
+UdpAdapter.hh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4518/branches/plexil-4/src/interfaces/UdpAdapter/UdpAdapter.hh
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/plexil/code/!svn/ver/4032/branches/plexil-4/src/interfaces/UdpAdapter/Makefile.am
+END
+udp-utils.cc
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/p/plexil/code/!svn/ver/4518/branches/plexil-4/src/interfaces/UdpAdapter/udp-utils.cc
+END
+MessageQueueMap.cc
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/4518/branches/plexil-4/src/interfaces/UdpAdapter/MessageQueueMap.cc
+END
+UdpAdapter.cc
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/p/plexil/code/!svn/ver/4518/branches/plexil-4/src/interfaces/UdpAdapter/UdpAdapter.cc
+END
+udp-utils.hh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/p/plexil/code/!svn/ver/3873/branches/plexil-4/src/interfaces/UdpAdapter/udp-utils.hh
+END
+MessageQueueMap.hh
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/p/plexil/code/!svn/ver/3976/branches/plexil-4/src/interfaces/UdpAdapter/MessageQueueMap.hh
+END

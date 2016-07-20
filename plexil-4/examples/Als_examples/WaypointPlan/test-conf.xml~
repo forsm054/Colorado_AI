@@ -1,0 +1,15 @@
+<Interfaces>
+ <Adapter AdapterType="OSNativeTime">
+  <LookupNames>time</LookupNames>
+ </Adapter>
+ <Adapter AdapterType="Utility">
+ </Adapter>
+ <Adapter AdapterType="IpcAdapter" Server="localhost" AllowDuplicateMessages="true">
+  <LookupNames>vel</LookupNames>
+  <LookupNames>xLoc</LookupNames>
+  <LookupNames>yLoc</LookupNames>
+  <LookupNames>zLoc</LookupNames>
+  <LookupNames>xTarget</LookupNames>
+  <DefaultCommandAdapter/>
+ </Adapter>
+</Interfaces>

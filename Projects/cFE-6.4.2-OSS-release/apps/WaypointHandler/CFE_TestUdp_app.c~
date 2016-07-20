@@ -1,0 +1,126 @@
+#include "CFE_TestUdp.h"
+#include "TestUdp_msg.h"
+
+#define TESTUDP_HK_TLM_MID	0x0321 // SB Message ID for TestUdp HK Packet....
+#define TESTUDP_CMD_MID		0x0123 // Message ID to route to pipe
+#define TESTUDP_SEND_HK_MID	0x1881
+
+
+TestUdp_hk_t	TestUdp_status; // housekeeping struct
+CFE_SB_PipeId_t	TestUdp_Tlm_pipe; // where is this struct defined?
+																	// Do I define it?
+
+// Initialize Functions
+void TestUdp_init(void);
+
+
+// Main Function
+void TestUdp_AppMain(void)
+{
+	uint32 RunStatus = CFE_ES_APP_RUN;
+	uint32 Status;
+	unint32 TlmStatus;
+	
+	CFE_ES_RegisterApp(); // Register app
+	
+	Status = TestUdp_init(); // initialize the app (Success returns CFE_SUCCESS)
+	if (Status != CFE_SUCCESS)
+	{
+		RunStatus = CFE_ES_APP_ERROR;
+	}
+	
+	// TestUdp Run Loop
+	while(CFE_ES_RunLoop(&RunStatus) == TRUE)
+	{
+		TlmStatus = Send_Telemetry();
+		
+		if (TlmStatus = CFE_SUCCESS);
+		{
+			CFE_ES_ExitApp(&RunStatus);
+		}
+		
+	} // End while
+	
+} // End TestUdp_AppMain
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void TestUdp_init(void)
+{
+	int status;
+	uint16 i;
+	char TlmPipeName[16];
+	uint16 TlmPipeDepth;	
+	
+	CFE_ES_RegisterApp(); // Register app w/ CFE
+	
+	TlmPipeDepth = 64;
+	strcpy(TlmPipeName, "TESTUDP_TLM_PIPE");
+	
+	// Register event filter table?
+	
+	// Initialize SB message (Address of SB Msg data buffer, SB msg ID associated w/ data,
+	//												size of buffer, buffer should be cleared by CFE);
+	CFE_SB_InitMsg(&TestUdp_status,TESTUDP_HK_TLM_MID,sizeof(TestUdp_status),TRUE);
+	
+	
+	// Create Telemetry pipe
+	status = CFE_SB_CreatePipe(&TestUdp_Tlm_pipe, TlmPipeDepth, TlmPipeName);
+	if(status != CFE_SUCCESS)
+	{
+		// error message
+	}
+	
+	// Subscriptions for TLM pipe
+	//for(i=0;i<sizeof(
+	
+} // End TestUdp_init
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void Send_Telemetry(void)
+{
+	struct sockaddr_in sin_other;
+	int s, i, slen=sizeof(sin_other);
+	char buf[BUFLEN];
+	int message[BUFLEN];
+	
+	if((s=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
+	{
+		//perror("Socket");
+		CFE_SendEvent(CREATESOCK_ERR,CFE_EVS_ERROR,"Failed to create socket");
+	}
+	
+	memset((char *) &sin_other, 0, sizeof(sin_other));
+	sin_other.sin_family = AF_INET;
+	sin_other.sin_port = htons(TLM_PORT); // 8034
+	
+	if(inet_aton(TLM_ADDR, &sin_other.sin_addr) < 0)
+	{
+		CFE_SendEvent(CREATESOCK_ERR,CFE_EVS_ERROR,"Socket failed to connect to host");
+	}
+	
+	//while(1)
+	//{
+		//memset(buf, '\0', BUFLEN);
+		//printf("Enter Message: ");
+		//scanf("%s",buf);
+		
+		buf = "CFE UDP!!!";
+		
+		// send message
+		if(sendto(s,buf, sizeof(buf), 0, (struct sockaddr *) &sin_other, slen) < 0)
+		{
+			CFE_SendEvent(SENDSOCK_ERR,CFE_EVS_ERROR,"Socket failed to send data");
+		}
+	//}
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,8 @@
+#ifndef _Fly2A_Msgids_h_
+#define _Fly2A_Msgids_h_
+
+
+#define FLY2A_MID         0x1888
+#define FLY2A_RETURN_MID	0x1900
+
+#endif

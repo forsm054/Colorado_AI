@@ -1,0 +1,20 @@
+<Interfaces>
+ <Adapter AdapterType="OSNativeTime">
+  <LookupNames>time</LookupNames>
+ </Adapter>
+ <Adapter AdapterType="Utility">
+ </Adapter>
+ <Adapter AdapterType="UdpAdapter" debug="true" default_local_port="9876" default_peer_port="9876">
+  	<Message name="Fly2A" local_port="8036" peer_port="8036">
+  		<Parameter type="string" bytes="5" desc="command"/>
+  	</Message>
+  	<Message name="Fly2B" local_port="8036" peer_port="8036">
+  		<Parameter type="string" bytes="5" desc="command"/>
+  	</Message>
+  	<Message name="CommandReturn" local_port="8039" peer_port="8039">
+  		<Parameter type="string" bytes="8" desc="header"/>
+  		<Parameter type="string" bytes="50" desc="command"/>
+  		<Parameter type="bool" bytes="2" desc="return"/>
+  	</Message>
+ </Adapter>
+</Interfaces>
