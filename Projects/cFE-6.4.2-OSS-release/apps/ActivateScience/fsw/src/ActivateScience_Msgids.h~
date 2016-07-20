@@ -1,7 +1,0 @@
-#ifndef _ActivateScience_msgids_h_
-#define _ActivateScience_msgids_h_
-
-
-#define ACTIVATESCIENCE_MID         0x1884
-
-#endif

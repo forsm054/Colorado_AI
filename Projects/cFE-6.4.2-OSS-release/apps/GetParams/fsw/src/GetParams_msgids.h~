@@ -1,8 +1,0 @@
-#ifndef _GetParams_msgids_h_
-#define _GetParams_msgids_h_
-
-
-#define GETPARAMS_MID         0x1884
-//#define CI_LAB_SEND_HK_MID        	0x1885
-
-#endif
