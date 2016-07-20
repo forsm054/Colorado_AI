@@ -10,7 +10,7 @@ Running Demo:
 1. Open terminal (terminal 1: CFE) 
 2. cd ~/Waypoint_Demo/Projects/cFE-6.4.2-OSS-release
 3. source setvars.sh
-4. cd build/exe
+4. cd build/cpu1/exe
 5. sudo ./core-linux.bin --> This should run CoreFlight, which will load all of the apps and pause on "Processing UDP Command" or "Stop FLYWHEEL"
 
 6. Open a new terminal (terminal 2: GUI)
