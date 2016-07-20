@@ -97,6 +97,6 @@ MonitorState_State_t SimPosition(MonitorState_State_t);
 bool MonitorStatus(MonitorState_State_t);
 void LogState(MonitorState_State_t);
 double dot_product(double *, double *, int);
-double mag(double *, int)
+double mag(double *, int);
 
 #endif

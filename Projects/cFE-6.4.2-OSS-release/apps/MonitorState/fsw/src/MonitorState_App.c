@@ -39,9 +39,6 @@
 #include "MonitorState_Msgids.h"
 
 MonitorState_AppData_t	MonitorState_AppData;
-char pathFile[100];
-char * directory = "/home/al/Desktop";
-char * LogStateFile = "WP_State.txt";
 
 static CFE_EVS_BinFilter_t MonitorState_EventFilters[] = 
 	{
@@ -152,9 +149,10 @@ void MonitorState_init(void)
 	CFE_SB_InitMsg(&MonitorState_AppData.BusPacket_B, MONITORSTATE_RETURN2B_MID, sizeof(MonitorState_BusPacket_t), TRUE);
 	
 	char pathFile[100];
-	char* directory;
-	directory = "/home/al/Desktop";
-	sprintf(pathFile, "%s/%s", directory, LogStateFile);
+	char * addDir = "Waypoint_Demo";
+	char * LogStateFile = "WP_State.txt";
+	char * homeDir = getenv("HOME");
+	sprintf(pathFile, "%s/%s/%s", homeDir, addDir, LogStateFile);
 	
 	FILE *fp = fopen(pathFile, "w");
 	//FIXME: find a better way to populate. This will probably be in python script
@@ -300,7 +298,11 @@ void LogState(MonitorState_State_t State)
 	
 	CFE_EVS_SendEvent(DEBUG,CFE_EVS_INFORMATION,"Logging State");
 	
-	sprintf(pathFile, "%s/%s", directory, LogStateFile);
+	char pathFile[100];
+	char * addDir = "Waypoint_Demo";
+	char * LogStateFile = "WP_State.txt";
+	char * homeDir = getenv("HOME");
+	sprintf(pathFile, "%s/%s/%s", homeDir, addDir, LogStateFile);
 	
 	FILE *fp = fopen(pathFile, "a");
 

@@ -71,7 +71,7 @@
 # Having an absolute path would be necessary for including this file in a
 # shared login script.
 #
-export CFS_MISSION=/home/al/Projects/cFE-6.4.2-OSS-release
+export CFS_MISSION=${HOME}/Waypoint_Demo/Projects/cFE-6.4.2-OSS-release
 
 #
 # Variable: APP_DIR
